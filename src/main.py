@@ -3,23 +3,23 @@ import numpy as np
 sys.path.append(r'../')
 from spl.spl_train import run_spl
 
-output_folder = 'results_dump/' ## directory to save discovered results
+output_folder = 'logs/' ## directory to save discovered results
 save_eqs = True                ## if true, discovered equations are saved to "output_folder" dir
 
-task = 'nguyen-3'
+task = 'task1'
 grammars = ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A', 
             'A->x', 'A->x**2', 'A->x**4', 
             'A->exp(A)', 'A->cos(x)', 'A->sin(x)']
 nt_nodes = ['A']
-num_run = 10
+num_run = 2
 
-X = np.random.uniform(-1, 1, 20)
-Y = X ** 3 + X ** 2 + X
-XY = np.append(X, Y).reshape(2, 20)
+X = np.random.uniform(-2, 2, 100)
+Y = X ** 3 + np.sin(X) ** 2 + X
+XY = np.append(X, Y).reshape(2, 100)
 
-
-train_sample = XY[:, :15]
-test_sample = XY[:, 15:]
+b = int(len(X) * 0.7)
+train_sample = XY[:, :b]
+test_sample = XY[:, b:]
 
 all_eqs, success_rate, all_times = run_spl(task = task, 
                                            grammars = grammars,
