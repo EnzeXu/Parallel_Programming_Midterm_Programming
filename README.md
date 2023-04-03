@@ -14,8 +14,8 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvi
 ### Steps
 
 1. Get a set of $[x1, x2, x3, ... xn, y]$
-2. Use arbitrary NN to learn y = f(x1, x2, x3, ... xn) \\
-   (like knowledge distillation) \\      
+2. Use arbitrary NN to learn y = f(x1, x2, x3, ... xn) 
+   (like knowledge distillation)
    or skip this steps if already have enough data.
 3. Generate the data using trained NN
 4. Learn $f_{x2, x3, ... xn}(x1), f_{x1, x3, ... xn}(x2), \dots$ using SVSR.
@@ -33,5 +33,5 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvi
 - [ ] integrate step 3, 4, 5
 - [ ] reading gnn distill
 
-### 
+### Other's work
 - https://github.com/brendenpetersen/deep-symbolic-optimization

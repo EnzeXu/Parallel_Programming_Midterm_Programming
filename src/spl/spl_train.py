@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 import time
-from score import simplify_eq, score_with_est
-from spl_base import SplBase
-from spl_task_utils import *
+from .score import simplify_eq, score_with_est
+from .spl_base import SplBase
+# from .spl_task_utils import *
 
 import warnings
 
@@ -13,9 +13,15 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
 
-def run_spl(task, num_run, transplant_step, data_dir='data/', max_len = 50, eta = 0.9999, 
+def run_spl(task, 
+            grammars, 
+            nt_nodes, 
+            num_run, 
+            train_sample,
+            test_sample,
+            transplant_step = 10000, max_len = 50, eta = 0.9999, 
             max_module_init = 10, num_aug = 5, exp_rate = 1/np.sqrt(2), num_transplant = 20, 
-            norm_threshold=1e-5, count_success = True):
+            norm_threshold = 1e-5, count_success = True):
     """
     Executes the main training loop of Symbolic Physics Learner.
     
@@ -55,15 +61,6 @@ def run_spl(task, num_run, transplant_step, data_dir='data/', max_len = 50, eta 
     all_times: List<Float>
         runtimes for successful runs. 
     """
-    
-    ## define production rules and non-terminal nodes. 
-    grammars = rule_map[task]
-    nt_nodes = ntn_map[task]
-
-
-    ## read training and testing data
-    train_sample = pd.read_csv(data_dir + task + '_train.csv', header=None).to_numpy().T
-    test_sample = pd.read_csv(data_dir + task + '_test.csv', header=None).to_numpy().T
 
     num_success = 0
     all_times = []
