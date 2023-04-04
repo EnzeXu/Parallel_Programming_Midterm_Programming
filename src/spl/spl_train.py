@@ -19,7 +19,8 @@ def run_spl(task,
             num_run, 
             train_sample,
             test_sample,
-            transplant_step = 10000, max_len = 50, eta = 0.9999, 
+            transplant_step = 10000, 
+            max_len = 50, eta = 0.9999, 
             max_module_init = 10, num_aug = 5, exp_rate = 1/np.sqrt(2), num_transplant = 1, 
             norm_threshold = 1e-5, count_success = True):
     """
@@ -71,7 +72,7 @@ def run_spl(task,
 
     for i_test in range(num_run):
 
-        print("test", i_test)
+        print("round", i_test)
         best_solution = ('nothing', 0)
 
         exploration_rate = exp_rate
@@ -99,7 +100,8 @@ def run_spl(task,
 
             _, current_solution, good_modules = spl_model.run(transplant_step, 
                                                               num_play=10, 
-                                                              print_flag=True)
+                                                              print_flag=True,
+                                                              print_freq=10)
 
             end_time = time.time() - start_time
 
@@ -128,11 +130,10 @@ def run_spl(task,
                     all_times.append(discovery_time)
                 break
 
-        all_eqs.append(simplify_eq(best_solution[0]))
-        print('\n{} tests complete after {} iterations.'.format(i_test+1, i_itr+1))
+        all_eqs.append((simplify_eq(best_solution[0]), test_score))
+        print('\nround {} complete after {} iterations.'.format(i_test, i_itr+1))
         print('best solution: {}'.format(simplify_eq(best_solution[0])))
         print('test score: {}'.format(test_score))
-        print()
     
     success_rate = num_success / num_run
     if count_success:

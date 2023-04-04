@@ -35,3 +35,4 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvi
 
 ### Other's work
 - https://github.com/brendenpetersen/deep-symbolic-optimization
+- https://github.com/isds-neu/SymbolicPhysicsLearner

@@ -1,38 +1,50 @@
 import sys
 import numpy as np
-sys.path.append(r'../')
 from spl.spl_train import run_spl
+from mksr.combiner import combiner
 
-output_folder = 'logs/' ## directory to save discovered results
-save_eqs = True                ## if true, discovered equations are saved to "output_folder" dir
+np.random.seed(1)
+output_folder = 'logs/'   ## directory to save discovered results
+save_eqs = True           ## if true, discovered equations are saved to "output_folder" dir
 
+target_equ = "x0**2 * x1 + x0 + 2 * x1"
+var_num = 2
+x_range = (-5, 5)
 task = 'task1'
 grammars = ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A', 
-            'A->x', 'A->x**2', 'A->x**4', 
+            'A->x', 'A->C', 
             'A->exp(A)', 'A->cos(x)', 'A->sin(x)']
 nt_nodes = ['A']
-num_run = 2
+pivot = [3.14, 0.618]
+bst_eqs = []
 
-X = np.random.uniform(-2, 2, 100)
-Y = X ** 3 + np.sin(X) ** 2 + X
-XY = np.append(X, Y).reshape(2, 100)
+test_mksr_only = 1
+if test_mksr_only:
+    bst_eqs = ['0.618*x0**2 + x0 + 1.236', '11.8596*x1 + 3.14']
+    exit(0)
 
-b = int(len(X) * 0.7)
-train_sample = XY[:, :b]
-test_sample = XY[:, b:]
 
-all_eqs, success_rate, all_times = run_spl(task = task, 
-                                           grammars = grammars,
-                                           nt_nodes = nt_nodes,
-                                           num_run = num_run,
-                                           train_sample = train_sample,
-                                           test_sample = test_sample)
-                                           
-if save_eqs:
-    output_file = open(output_folder + task + '.txt', 'w')
-    for eq in all_eqs:
-        output_file.write(eq + '\n')
-    output_file.close()
+for var_id in range(var_num):
+    print(f"For variable x{var_id}")
+    X = np.random.uniform(*x_range, 100)
+    for v in range(var_num):
+        locals()[f'x{v}'] = pivot[v]
+    locals()[f'x{var_id}'] = X
+    Y = eval(target_equ)
+    XY = np.append(X, Y).reshape(2, 100)
 
-print('success rate :', "{:.0%}".format(success_rate))
-print('average discovery time is', np.round(np.mean(all_times), 3), 'seconds')                                          
+    b = int(len(X) * 0.7)
+    train_sample = XY[:, :b]
+    test_sample = XY[:, b:]
+
+    all_eqs, success_rate, all_times = run_spl(task = task, 
+                                            grammars = grammars,
+                                            nt_nodes = nt_nodes,
+                                            num_run = 2,
+                                            train_sample = train_sample,
+                                            test_sample = test_sample,
+                                            transplant_step = 200,
+                                            num_transplant = 2)
+    bst_eqs.append(max(all_eqs, key=lambda x: x[1])[0].replace('x', f'x{var_id}'))
+
+print(bst_eqs)                                    
