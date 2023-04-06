@@ -29,10 +29,33 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvi
 - [x] implement Dominant Search (2023.03.15)
 - [x] reading dso (2023.03.19)
 - [x] learning Monte Carlo method for SR (2023.04.02)
-- [x] solve problems of y = x_1 * x_2 + x_1 + 2 * x_2 
-- [x] integrate step 3, 4, 5
-- [ ] reading gnn distill
+- [x] finish version 1 and testing (2023.04.04)
+- [x] solve problems of y = x_1 * x_2 + x_1 + 2 * x_2 (2023.04.06)
+- [x] integrate step 3, 4, 5 (2023.04.06)
+- [ ] reading dso other dissertation
+- [ ] optimizing speed
+- [ ] implement step 1, 2 and combine
 
 ### Other's work
 - https://github.com/brendenpetersen/deep-symbolic-optimization
 - https://github.com/isds-neu/SymbolicPhysicsLearner
+
+### Current Testing Result
+command
+```sh
+conda activate sr
+python3 src/main.py
+```
+2023/04/06
+```
+ground truth equation: sin(x0) * (2.5 * x1 ** 2 + cos(x1)) + x1 + 3
+discovered equation: x1 + (2.50004998*x1**2 + cos(x1))*sin(x0) + 3.0
+```
+```
+ground truth equation: x0 * x1 + x0 + 2 * x1 + exp(x1)
+discovered equation: x0*(x1 + 1.0) + 2.0*x1 + exp(x1)
+```
+```
+ground truth equation: x0 * x1 + x0 + 2 * x1 / x2 + x2 * exp(x1)
+discovered equation: (2.0*x1 + x2*(x0*(x1 + 1.0) + x2*exp(x1)))/x2
+```

@@ -2,14 +2,14 @@
 import re
 import sympy as sy
 import numpy as np
-from numpy import sin, cos, log
+from numpy import sin, cos, log, exp
 from scipy.optimize import minimize
 from spl.spl_train import run_spl
 # from mksr.combiner import combiner
 
 # problem specification:
-var_num = 2
-x_range = {'x0': (-5, 5), 'x1': (-5, 5)}
+var_num = 3
+x_range = {'x0': (-5, 5), 'x1': (-5, 5), 'x2': (-5, 5)}
 grammars = ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A', 
             'A->x', 'A->C', 
             'A->exp(A)', 'A->cos(x)', 'A->sin(x)']
@@ -24,13 +24,18 @@ c_regression_num = 100
 def NeuroEval(x_list):               # assume the NN can eval for any x
     # target_equ = "x0**2 * x1 + x0 + 2 * x1"
     # target_equ = "sin(x0) * x1 + 3"
-    target_equ = "sin(x0) * (2.5 * x1 ** 2 + cos(x1)) + x1 + 3"
+    # target_equ = "x0 * x1 + x0 + 2 * x1 + exp(x1)"
+    # target_equ = "sin(x0) * (2.5 * x1 ** 2 + cos(x1)) + x1 + 3"
+    target_equ = "x0 * x1 + x0 + 2 * x1 / x2 + x2 * exp(x1)"
     for v in range(var_num):
         locals()[f'x{v}'] = x_list[v]
     return eval(target_equ)
 def ReplaceNumbersWithC(text):
     pattern = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)"
     return re.sub(pattern, "C", text)
+def ReplaceXwithXi(text, Xi):
+    pattern = r"(?<!e)x"
+    return re.sub(pattern, Xi, text)
 
 if __name__ == "__main__":
     equa = '0.0'  # any constant
@@ -91,8 +96,9 @@ if __name__ == "__main__":
                                                     transplant_step = 200,
                                                     num_transplant = 2,
                                                     eta = 0.999)
-            result = max(all_eqs, key=lambda x: x[1])[0].replace('x', f'x{var_id}')
+            result = max(all_eqs, key=lambda x: x[1])[0]
             result = f"({result})"
+            result = ReplaceXwithXi(result, f"x{var_id}")
             equa = equa.replace(f'c{cid}', result)
         equa = str(sy.simplify(equa))
     
