@@ -29,8 +29,8 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvi
 - [x] implement Dominant Search (2023.03.15)
 - [x] reading dso (2023.03.19)
 - [x] learning Monte Carlo method for SR (2023.04.02)
-- [ ] solve problems of y = x_1 * x_2 + x_1 + 2 * x_2 
-- [ ] integrate step 3, 4, 5
+- [x] solve problems of y = x_1 * x_2 + x_1 + 2 * x_2 
+- [x] integrate step 3, 4, 5
 - [ ] reading gnn distill
 
 ### Other's work
