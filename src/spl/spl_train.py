@@ -72,7 +72,7 @@ def run_spl(task,
 
     for i_test in range(num_run):
 
-        print("round", i_test)
+        print(f"task {task} round {i_test}")
         best_solution = ('nothing', 0)
 
         exploration_rate = exp_rate
