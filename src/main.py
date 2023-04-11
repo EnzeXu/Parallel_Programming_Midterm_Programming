@@ -5,8 +5,9 @@ from spl.spl_train import run_spl
 from mksr.mksr_solver import run_mksr
 
 # problem specification:
-var_num = 3
-x_range = {'x0': (-5, 5), 'x1': (-5, 5), 'x2': (-5, 5), 'x3': (2, 3)}
+func_name = 'test2'
+var_num = 2
+x_range = {'x0': (0, 1), 'x1': (0, 1), 'x2': (-5, 5), 'x3': (2, 3)}
 grammars = ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A', 
             'A->x', 'A->C',
             'A->exp(A)', 'A->cos(x)', 'A->sin(x)']
@@ -18,25 +19,25 @@ spl_eval_num = 90
 spl_test_num = 10
 c_regression_num = 100
 
+from srnn.utils import Trainer
+trainer = Trainer(
+    model_mode = 'MLP',
+    func_name = func_name,
+    batch_size = 128,
+    lr = 0.0001,
+    seed = 0,
+    cuda = 0,
+)
+try:
+    trainer.load()
+except:
+    trainer.fit(2000)
+    trainer.load()
+    trainer.model.cpu()
+    
 def NeuroEval(X):               # assume the NN can eval for any x
-    func_name = 'test2'
-    from srnn.utils import Trainer
-    trainer = Trainer(
-        model_mode = 'MLP',
-        func_name = func_name,
-        batch_size = 128,
-        lr = 0.0001,
-        seed = 0,
-        cuda = 0,
-    )
-    try:
-        trainer.load()
-    except:
-        trainer.fit(2000)
-        trainer.load()
-        
     if not isinstance(X, torch.Tensor):
-        X = torch.tensor(X)
+        X = torch.tensor(X.T, dtype = torch.float32)
     return trainer.model(X).detach().numpy()
 
 if __name__ == "__main__":

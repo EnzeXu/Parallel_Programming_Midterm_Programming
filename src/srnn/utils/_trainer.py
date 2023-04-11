@@ -57,7 +57,6 @@ class Trainer:
         self.opt = torch.optim.Adam(self.model.parameters(), lr = lr)
         self.device = torch.device(f'cuda:{cuda}' if torch.cuda.is_available() else 'cpu')
         self.train_iter, self.val_iter = self.generate_data_iter(func_name, batch_size)
-        print('device:', self.device)
             
     def fit(self, epochs):
         train_loss_list, val_loss_list = [], []
