@@ -1,5 +1,6 @@
 # import sys
 import numpy as np
+import torch
 from spl.spl_train import run_spl
 from mksr.mkdr_solver import run_mksr
 
@@ -17,19 +18,26 @@ spl_eval_num = 90
 spl_test_num = 10
 c_regression_num = 100
 
-def NeuroEval(x_list):               # assume the NN can eval for any x
-    from numpy import sin, cos, log, exp
-    # target_equ = "x0**2 * x1 + x0 + 2 * x1"
-    # target_equ = "sin(x0) * x1 + 3"
-    # target_equ = "x0 * x1 + x0 + 2 * x1 + exp(x1)"
-    # target_equ = "sin(x0) * (2.5 * x1 ** 2 + cos(x1)) + x1 + 3"
-    target_equ = "x0 * x1 + x0 + 2 * x1 / x2 + x2 * exp(x1)"
-    # target_equ = "(2 + x0) / (2 + x1 ** 2) + 5"
-    # target_equ = "(x0 - x1 * x2 / x3**2) / (1-x1**2/x3**2)**0.5"
-    # target_equ = "(1 + x0) / (1 + x2**3) + x1"
-    for v in range(var_num):
-        locals()[f'x{v}'] = x_list[v]
-    return eval(target_equ)
+def NeuroEval(X):               # assume the NN can eval for any x
+    func_name = 'test2'
+    from srnn.utils import Trainer
+    trainer = Trainer(
+        model_mode = 'MLP',
+        func_name = func_name,
+        batch_size = 128,
+        lr = 0.0001,
+        seed = 0,
+        cuda = 0,
+    )
+    try:
+        trainer.load()
+    except:
+        trainer.fit(2000)
+        trainer.load()
+        
+    if not isinstance(X, torch.Tensor):
+        X = torch.tensor(X)
+    return trainer.model(X).detach().numpy()
 
 if __name__ == "__main__":
     np.random.seed(0)
