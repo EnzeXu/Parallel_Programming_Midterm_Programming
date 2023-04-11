@@ -60,7 +60,7 @@ def run_mksr(var_num,
                 for i in range(len(c)): 
                     locals()['c'+str(i)] = c[i]
                 return np.linalg.norm(eval(equa) - f_true, 2)
-            c_lst = minimize(eq_test, [1.0] * len(c_lst), method='Powell', tol=1e-6).x.tolist() 
+            c_lst = minimize(eq_test, [1.0] * len(c_lst), method='Powell', tol=1e-3).x.tolist() 
             C[:, tid] = np.array(c_lst)
 
         # Step 2 : for each constant, do sr using spl
