@@ -2,7 +2,7 @@
 import numpy as np
 import torch
 from spl.spl_train import run_spl
-from mksr.mkdr_solver import run_mksr
+from mksr.mksr_solver import run_mksr
 
 # problem specification:
 var_num = 3
