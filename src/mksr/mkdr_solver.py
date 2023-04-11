@@ -76,7 +76,7 @@ def run_mksr(var_num,
                                                     num_run = 2,
                                                     train_sample = train_sample,
                                                     test_sample = test_sample,
-                                                    transplant_step = 200,
+                                                    transplant_step = 1000,
                                                     num_transplant = 2,
                                                     eta = 0.999)
             result = max(all_eqs, key=lambda x: x[1])[0]

@@ -9,7 +9,7 @@ FuncSettings = {
         'x_len': 3,
         'model': {
             'MLP': {
-                'layer_size': [3, 128, 128, 1]
+                'layer_size': [3, 512, 512, 1]
             },
             'Taylor': {
                 'in_features':      3, 
@@ -23,7 +23,7 @@ FuncSettings = {
     'test2': {
         'func': lambda x: x[:, 0]**2 * x[:, 1] + x[:, 0] + 2 * x[:, 1],
         'type': 'normal',
-        'sample_times': 8000,
+        'sample_times': 100000,
         'x_len': 2,
         'model': {
             'MLP': {
@@ -32,7 +32,7 @@ FuncSettings = {
             'Taylor': {
                 'in_features':      2, 
                 'out_features':     1, 
-                'order':            3, 
+                'order':            1, 
                 'rank':             8
             }
         }
