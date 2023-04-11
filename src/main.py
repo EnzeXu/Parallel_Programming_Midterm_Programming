@@ -7,7 +7,7 @@ from mksr.mksr_solver import run_mksr
 # problem specification:
 func_name = 'test2'
 var_num = 2
-x_range = {'x0': (0, 1), 'x1': (0, 1), 'x2': (-5, 5), 'x3': (2, 3)}
+x_range = {'x0': (-5, 5), 'x1': (-5, 5), 'x2': (-5, 5), 'x3': (2, 3)}
 grammars = ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A', 
             'A->x', 'A->C',
             'A->exp(A)', 'A->cos(x)', 'A->sin(x)']

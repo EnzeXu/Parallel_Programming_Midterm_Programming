@@ -6,8 +6,11 @@ import re
 
 
 def ReplaceNumbersWithC(text):
+    text = text.replace("**2", "**TWO") # protect ^2
     pattern = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)"
-    return re.sub(pattern, "C", text)
+    text = re.sub(pattern, "C", text)
+    text = text.replace("**TWO", "**2") # protect ^2
+    return text
 
 def ReplaceXwithXi(text, Xi):
     pattern = r"(?<!e)x"
@@ -60,7 +63,7 @@ def run_mksr(var_num,
                 for i in range(len(c)): 
                     locals()['c'+str(i)] = c[i]
                 return np.linalg.norm(eval(equa) - f_true, 2)
-            c_lst = minimize(eq_test, [1.0] * len(c_lst), method='Powell', tol=1e-3).x.tolist() 
+            c_lst = minimize(eq_test, [1.0] * len(c_lst), method='Powell', tol=1e-6).x.tolist() 
             C[:, tid] = np.array(c_lst)
 
         # Step 2 : for each constant, do sr using spl
@@ -73,10 +76,10 @@ def run_mksr(var_num,
             all_eqs, success_rate, all_times = SVSR(task = f"(x{var_id}, c{cid})", 
                                                     grammars = grammars,
                                                     nt_nodes = nt_nodes,
-                                                    num_run = 2,
+                                                    num_run = 1,
                                                     train_sample = train_sample,
                                                     test_sample = test_sample,
-                                                    transplant_step = 200,
+                                                    transplant_step = 1000,
                                                     num_transplant = 2,
                                                     eta = 0.999)
             result = max(all_eqs, key=lambda x: x[1])[0]

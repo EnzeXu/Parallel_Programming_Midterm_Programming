@@ -9,7 +9,6 @@ from scipy.integrate import odeint
 import os
 import time
 import logging
-import yaml
 
 from ._utils import *
 from ._settings import *
@@ -112,7 +111,7 @@ class Trainer:
     def generate_data_iter(self, func_name: str, batch_size: int):
         cfg = FuncSettings[func_name]
         if cfg['type'] == 'normal':
-            data_distr = Uniform(torch.tensor([0.0]), torch.tensor([1.0]))
+            data_distr = Uniform(torch.tensor([-5.0]), torch.tensor([5.0]))
             X = data_distr.sample((cfg['sample_times'], cfg['x_len'])).squeeze(-1)
             Y = cfg['func'](X).unsqueeze(-1)
             split = int(len(X) * 0.8)
