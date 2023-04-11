@@ -38,7 +38,7 @@ class MLP(nn.Module):
     def register_params(self):
         def init_linear(m):
             if type(m) == nn.Linear:
-                nn.init.xavier_uniform_(m.weight)
+                nn.init.normal_(m.weight, 0, 0.1)
                 nn.init.zeros_(m.bias)
         self.seq.apply(init_linear)
         
