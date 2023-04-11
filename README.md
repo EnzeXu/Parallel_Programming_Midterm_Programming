@@ -8,7 +8,7 @@ Multivariable Killer of Symbolic Regression
 ```sh
 conda create --name sr python=3.10 -y
 conda activate sr
-conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia
+conda install numpy pandas sympy scipy
 ```
 
 ### Steps
