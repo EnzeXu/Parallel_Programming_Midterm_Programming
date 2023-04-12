@@ -1,28 +1,29 @@
 # import sys
-from srnn.utils import Trainer
 import numpy as np
 import torch
+
+from srnn.utils import Trainer
 from svsr.spl.spl_train import run_spl
 from mksr.mksr_solver import run_mksr
 
 # problem specification:
-func_name = 'test2'
-var_num = 2
-x_range = {'x0': (-5, 5), 'x1': (-5, 5), 'x2': (-5, 5), 'x3': (2, 3)}
-grammars = ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A',
+FUNC_NAME = 'test2'
+VAR_NUM = 2
+X_RANGE = {'x0': (-5, 5), 'x1': (-5, 5), 'x2': (-5, 5), 'x3': (2, 3)}
+GRAMMARS = ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A',
             'A->x', 'A->C',
             'A->exp(x)', 'A->cos(x)', 'A->sin(x)']
-nt_nodes_num = ['A']
+NT_NODES = ['A']
 np.random.seed(0)
 
 # hyper-parameter:
-spl_eval_num = 90
-spl_test_num = 10
-c_regression_num = 100
+SPL_TRAIN_NUM = 90
+SPL_TEST_NUM = 10
+C_REGRESSION_NUM = 100
 
 trainer = Trainer(
     model_mode='MLP',
-    func_name=func_name,
+    func_name=FUNC_NAME,
     batch_size=128,
     lr=0.0001,
     seed=0,
@@ -36,23 +37,25 @@ except:
     trainer.model.cpu()
 
 
-def neuro_eval(X: np.ndarray):               # assume the NN can eval for any x
-    if not isinstance(X, torch.Tensor):
-        X = torch.tensor(X.T, dtype=torch.float32)
-    return trainer.model(X).detach().numpy()
+def neuro_eval(x: np.ndarray):              
+    """assume the NN can eval for any x
+    """
+    if not isinstance(x, torch.Tensor):
+        x = torch.tensor(x.T, dtype=torch.float32)
+    return trainer.model(x).detach().numpy()
 
 
 if __name__ == "__main__":
     np.random.seed(0)
-    equa = run_mksr(
-        func_name=func_name,
-        var_num=var_num,
-        x_range=x_range,
-        grammars=grammars,
-        nt_nodes_num=nt_nodes_num,
+    equation = run_mksr(
+        FUNC_NAME=FUNC_NAME,
+        VAR_NUM=VAR_NUM,
+        X_RANGE=X_RANGE,
+        GRAMMARS=GRAMMARS,
+        NT_NODES=NT_NODES,
         neuro_eval=neuro_eval,
         svsr=run_spl,
-        spl_eval_num=spl_eval_num,
-        spl_test_num=spl_test_num,
-        c_regression_num=c_regression_num)
-    print(f"discovered euqation: {equa}")
+        SPL_TRAIN_NUM=SPL_TRAIN_NUM,
+        SPL_TEST_NUM=SPL_TEST_NUM,
+        C_REGRESSION_NUM=C_REGRESSION_NUM)
+    print(f"discovered euqation: {equation}")

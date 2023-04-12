@@ -1,3 +1,5 @@
+"""Solve mksr problem use a given svsr method.
+"""
 import numpy as np
 from scipy.optimize import minimize
 from numpy import sin, cos, log, exp
@@ -6,7 +8,8 @@ import re
 import json
 
 
-def replace_number_with_C(text: str) -> str:
+def _replace_number_with_capital_c(text: str) -> str:
+    # TODO(cxt): a more detailed protection rule
     text = text.replace("**2", "**TWO")  # protect ^2
     pattern = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)"
     text = re.sub(pattern, "C", text)
@@ -14,31 +17,33 @@ def replace_number_with_C(text: str) -> str:
     return text
 
 
-def replace_x_with_xi(text: str, Xi: str) -> str:
+def _replace_x_with_xi(text: str, Xi: str) -> str:
     pattern = r"(?<!e)x"
     return re.sub(pattern, Xi, text)
 
 
-def generate_data(
-        equa: str,
+def _generate_data(
+        equation: str,
         c_list: list,
         var_num: int,
         var_id: int,
         x_range: tuple,
-        spl_test_num: int,
-        spl_eval_num: int,
+        data_num: int,
         c_regression_num: int,
         neuro_eval: callable,
 ) -> tuple[np.ndarray, np.ndarray]:
-    # Step 1 : generate data. The result is:
-    # X : shape = (1, test_num)       the variable x{var_id}'s value
-    # C : shape = (c_count, test_num) the corresponding constant value
+    """generate data for svsr
+
+    Returns:
+    X : shape = (1, test_num)       the variable x{var_id}'s value
+    C : shape = (c_count, test_num) the corresponding constant value
+    """
     pivot = np.empty(var_num)
     for vid in range(var_id + 1, var_num):
         pivot[vid] = np.random.uniform(*x_range[f"x{vid}"])
-    C = np.empty((len(c_list), spl_test_num + spl_eval_num))
-    X = np.empty((1, spl_test_num + spl_eval_num))
-    for tid in range(spl_eval_num + spl_test_num):
+    C = np.empty((len(c_list), data_num))
+    X = np.empty((1, data_num))
+    for tid in range(data_num):
         cur_x = np.empty((var_num, c_regression_num))
         for vid in range(var_num):
             if vid < var_id:
@@ -57,7 +62,7 @@ def generate_data(
         def eq_test(c):
             for i in range(len(c)):
                 locals()['c'+str(i)] = c[i]
-            return np.linalg.norm(eval(equa) - f_true, 2)
+            return np.linalg.norm(eval(equation) - f_true, 2)
         c_list = minimize(eq_test, [1.0] * len(c_list),
                           method='Powell', tol=1e-6).x.tolist()
         C[:, tid] = np.array(c_list)
@@ -65,72 +70,90 @@ def generate_data(
 
 
 def run_mksr(
-        func_name: str,
-        var_num: int,
-        x_range: tuple,
-        grammars: list,
-        nt_nodes_num: int,
+        FUNC_NAME: str,
+        VAR_NUM: int,
+        X_RANGE: dict,
+        GRAMMARS: list,
+        NT_NODES: set[str],
         neuro_eval: callable,
         svsr: callable,
-        spl_eval_num=90,
-        spl_test_num=10,
-        c_regression_num=100,
-        skip_step_1=None,
-        skip_step_2=None,
+        SPL_TRAIN_NUM: int = 90,
+        SPL_TEST_NUM: int = 10,
+        C_REGRESSION_NUM: int = 100,
+        skip_step_1: int | None = None,
+        skip_step_2: int | None = None,
 ) -> str:
-    record_file_name = f"results/{func_name}/mksr_last_result.json"
-    equa = '0.0'  # any constant
+    """doing multi variable symbolic regression according to the neuro_eval.
+
+    Args:
+    func_name: the name of the equation to be discovered.
+    var_num: the number of the variable, named as x0, x1, ...
+    x_range: range of x. e.g. x_range['x0'] = (-1, 1)
+    grammars: grammar list. e.g. 'A->A+A'
+    nt_nodes: the set of all non terminal nodes.
+    neuro_eval: the function provided by neuro network to do the evaluation.
+    svsr: the beneath method to do the single variable regression.
+    spl_train_num: how many tests needed to train spl.
+    spl_test_num: how many tests needed to test spl.
+    c_regression_num: how many tests needed to run the minimize.
+    skip_step_1: reserve for future debug.
+    skip_step_2: reserve for future debug.
+
+    Returns: The expression in str format.
+    """
+    record_file_name = f"results/{FUNC_NAME}/mksr_last_result.json"
+    equation = '0.0'  # any constant
     current_result = dict()
-    for var_id in range(var_num):
+    for var_id in range(VAR_NUM):
         # `equa` consider variable [0, var_id),
         # now we expand x_{var_id} to the equation.
         print(f"Expand variable x{var_id}")
-        print(f"Current equation: {equa}")
-        equa = replace_number_with_C(equa)
-        c_count = equa.count('C')
+        print(f"Current equation: {equation}")
+        equation = _replace_number_with_capital_c(equation)
+        c_count = equation.count('C')
         c_list = ['c'+str(i) for i in range(c_count)]
-        for c in c_list:
-            equa = equa.replace('C', c, 1)
-        print("After replacing:", equa)
-        X, C = generate_data(
-            equa=equa,
+        for c_with_id in c_list:
+            equation = equation.replace('C', c_with_id, 1)
+        print("After replacing:", equation)
+        X, C = _generate_data(
+            equation=equation,
             c_list=c_list,
-            var_num=var_num,
+            var_num=VAR_NUM,
             var_id=var_id,
-            x_range=x_range,
-            spl_test_num=spl_test_num,
-            spl_eval_num=spl_eval_num,
-            c_regression_num=c_regression_num,
+            x_range=X_RANGE,
+            data_num=SPL_TEST_NUM + SPL_TRAIN_NUM,
+            c_regression_num=C_REGRESSION_NUM,
             neuro_eval=neuro_eval)
         for cid in range(len(C)):
             if skip_step_2:
                 skip_step_2 -= 1
                 if "history_result" not in locals().keys():
-                    with open(record_file_name, "r") as f:
-                        history_result = json.load(f)
-                equa = history_result[str((var_id, cid))]
+                    with open(record_file_name, "rb") as file_name:
+                        history_result = json.load(file_name)
+                equation = history_result[str((var_id, cid))]
             else:
                 # Step 2 : for each constant, do sr using spl
                 XC = np.append(X, C[cid, :]).reshape(
-                    2, spl_test_num + spl_eval_num)
-                train_sample = XC[:, :spl_eval_num]
-                test_sample = XC[:, spl_eval_num:]
+                    2, SPL_TEST_NUM + SPL_TRAIN_NUM)
+                train_sample = XC[:, :SPL_TRAIN_NUM]
+                test_sample = XC[:, SPL_TRAIN_NUM:]
                 all_eqs, success_rate, all_times = svsr(
                     task=f"(x{var_id}, c{cid})",
-                    grammars=grammars,
-                    nt_nodes=nt_nodes_num,
+                    grammars=GRAMMARS,
+                    nt_nodes=NT_NODES,
                     num_run=1,
                     train_sample=train_sample,
                     test_sample=test_sample,
                     transplant_step=1000,
                     num_transplant=2,
                     eta=0.999)
+                del success_rate, all_times
                 result = max(all_eqs, key=lambda x: x[1])[0]
                 result = f"({result})"
-                result = replace_x_with_xi(result, f"x{var_id}")
-                equa = equa.replace(f'c{cid}', result)
-            current_result[str((var_id, cid))] = equa
-        equa = str(sy.simplify(equa))
-    with open(record_file_name, "w") as f:
-        json.dump(current_result, f)
-    return equa
+                result = _replace_x_with_xi(result, f"x{var_id}")
+                equation = equation.replace(f'c{cid}', result)
+            current_result[str((var_id, cid))] = equation
+        equation = str(sy.simplify(equation))
+    with open(record_file_name, "wb") as file_name:
+        json.dump(current_result, file_name)
+    return equation
