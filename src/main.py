@@ -10,7 +10,7 @@ var_num = 2
 x_range = {'x0': (-5, 5), 'x1': (-5, 5), 'x2': (-5, 5), 'x3': (2, 3)}
 grammars = ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A', 
             'A->x', 'A->C',
-            'A->exp(A)', 'A->cos(x)', 'A->sin(x)']
+            'A->exp(x)', 'A->cos(x)', 'A->sin(x)']
 nt_nodes = ['A']
 np.random.seed(0)
 
@@ -42,7 +42,8 @@ def NeuroEval(X):               # assume the NN can eval for any x
 
 if __name__ == "__main__":
     np.random.seed(0)
-    equa = run_mksr(var_num = var_num,
+    equa = run_mksr(func_name = func_name,
+                    var_num = var_num,
                     x_range = x_range,
                     grammars = grammars,
                     nt_nodes = nt_nodes,
