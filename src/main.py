@@ -17,9 +17,9 @@ NT_NODES = ['A']
 np.random.seed(0)
 
 # hyper-parameter:
-SPL_TRAIN_NUM = 90
-SPL_TEST_NUM = 10
-C_REGRESSION_NUM = 100
+SPL_TRAIN_NUM = 180
+SPL_TEST_NUM = 20
+C_REGRESSION_NUM = 400
 
 trainer = Trainer(
     model_mode='MLP',
@@ -57,5 +57,7 @@ if __name__ == "__main__":
         svsr=run_spl,
         SPL_TRAIN_NUM=SPL_TRAIN_NUM,
         SPL_TEST_NUM=SPL_TEST_NUM,
-        C_REGRESSION_NUM=C_REGRESSION_NUM)
+        C_REGRESSION_NUM=C_REGRESSION_NUM,
+        skip_step_1=2,
+        skip_step_2=0)
     print(f"discovered euqation: {equation}")

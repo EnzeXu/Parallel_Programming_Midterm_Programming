@@ -1,6 +1,7 @@
 """Solve mksr problem use a given svsr method.
 """
 import numpy as np
+import os
 from scipy.optimize import minimize
 from numpy import sin, cos, log, exp
 import sympy as sy
@@ -101,7 +102,8 @@ def run_mksr(
 
     Returns: The expression in str format.
     """
-    record_file_name = f"results/{FUNC_NAME}/mksr_last_result.json"
+    record_equation_file_prefix = f"results/{FUNC_NAME}/mksr/equation"
+    record_data_file_prefix = f"results/{FUNC_NAME}/mksr/data"
     equation = '0.0'  # any constant
     current_result = dict()
     for var_id in range(VAR_NUM):
@@ -115,22 +117,26 @@ def run_mksr(
         for c_with_id in c_list:
             equation = equation.replace('C', c_with_id, 1)
         print("After replacing:", equation)
-        X, C = _generate_data(
-            equation=equation,
-            c_list=c_list,
-            var_num=VAR_NUM,
-            var_id=var_id,
-            x_range=X_RANGE,
-            data_num=SPL_TEST_NUM + SPL_TRAIN_NUM,
-            c_regression_num=C_REGRESSION_NUM,
-            neuro_eval=neuro_eval)
+        if os.path.exists(f"{record_data_file_prefix}X{var_id}.npy") and os.path.exist(f"{record_data_file_prefix}X{var_id}.npy"):
+            X = np.load(f"{record_data_file_prefix}X{var_id}.npy")
+            C = np.load(f"{record_data_file_prefix}C{var_id}.npy")
+        else:
+            X, C = _generate_data(
+                equation=equation,
+                c_list=c_list,
+                var_num=VAR_NUM,
+                var_id=var_id,
+                x_range=X_RANGE,
+                data_num=SPL_TEST_NUM + SPL_TRAIN_NUM,
+                c_regression_num=C_REGRESSION_NUM,
+                neuro_eval=neuro_eval)
+            np.save(f"{record_data_file_prefix}X{var_id}.npy", X)
+            np.save(f"{record_data_file_prefix}C{var_id}.npy", C)
         for cid in range(len(C)):
-            if skip_step_2:
-                skip_step_2 -= 1
-                if "history_result" not in locals().keys():
-                    with open(record_file_name, "rb") as file_name:
-                        history_result = json.load(file_name)
-                equation = history_result[str((var_id, cid))]
+            save_name = f"{record_equation_file_prefix}_x{var_id}_c{cid}"
+            if os.path.exists(save_name):
+                with open(save_name, "r") as f:
+                    equation = f.read()
             else:
                 # Step 2 : for each constant, do sr using spl
                 XC = np.append(X, C[cid, :]).reshape(
@@ -144,7 +150,7 @@ def run_mksr(
                     num_run=1,
                     train_sample=train_sample,
                     test_sample=test_sample,
-                    transplant_step=1000,
+                    transplant_step=500,
                     num_transplant=2,
                     eta=0.999)
                 del success_rate, all_times
@@ -152,8 +158,8 @@ def run_mksr(
                 result = f"({result})"
                 result = _replace_x_with_xi(result, f"x{var_id}")
                 equation = equation.replace(f'c{cid}', result)
+                with open(save_name, "w") as f:
+                    f.write(equation)
             current_result[str((var_id, cid))] = equation
         equation = str(sy.simplify(equation))
-    with open(record_file_name, "wb") as file_name:
-        json.dump(current_result, file_name)
     return equation
