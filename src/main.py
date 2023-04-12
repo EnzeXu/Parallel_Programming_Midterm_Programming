@@ -35,7 +35,7 @@ except:
     trainer.load()
     trainer.model.cpu()
     
-def NeuroEval(X):               # assume the NN can eval for any x
+def neuro_eval(X):               # assume the NN can eval for any x
     if not isinstance(X, torch.Tensor):
         X = torch.tensor(X.T, dtype = torch.float32)
     return trainer.model(X).detach().numpy()
@@ -47,7 +47,7 @@ if __name__ == "__main__":
                     x_range = x_range,
                     grammars = grammars,
                     nt_nodes = nt_nodes,
-                    NeuroEval = NeuroEval,
+                    neuro_eval = neuro_eval,
                     SVSR = run_spl,
                     spl_eval_num = spl_eval_num,
                     spl_test_num = spl_test_num,

@@ -6,29 +6,29 @@ import re
 import json
 
 
-def ReplaceNumbersWithC(text):
+def replace_number_with_C(text):
     text = text.replace("**2", "**TWO") # protect ^2
     pattern = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)"
     text = re.sub(pattern, "C", text)
     text = text.replace("**TWO", "**2") # protect ^2
     return text
 
-def ReplaceXwithXi(text, Xi):
+def replace_x_with_xi(text, Xi):
     pattern = r"(?<!e)x"
     return re.sub(pattern, Xi, text)
 
-def GenerateData(equa, 
+def generate_data(equa, 
                  var_num, 
                  var_id, 
                  x_range, 
                  spl_test_num, 
                  spl_eval_num,
                  c_regression_num,
-                 NeuroEval):
+                 neuro_eval):
     # Step 1 : generate data. The result is:
     # X : shape = (1, test_num)       the variable x{var_id}'s value
     # C : shape = (c_count, test_num) the corresponding constant value
-    equa = ReplaceNumbersWithC(equa)
+    equa = replace_number_with_C(equa)
     c_count = equa.count('C')
     c_lst = ['c'+str(i) for i in range(c_count)]
     for c in c_lst: 
@@ -48,7 +48,7 @@ def GenerateData(equa,
                 cur_x[vid, :] = X[0, tid] = np.random.uniform(*x_range[f"x{vid}"])
             else:
                 cur_x[vid, :] = pivot[vid]
-        f_true = NeuroEval(cur_x)
+        f_true = neuro_eval(cur_x)
         # print(cur_x)
         for v in range(var_num):
             globals()[f'x{v}'] = cur_x[v]
@@ -65,7 +65,7 @@ def run_mksr(func_name,
              x_range,
              grammars,
              nt_nodes,
-             NeuroEval,
+             neuro_eval,
              SVSR,
              spl_eval_num = 90,
              spl_test_num = 10,
@@ -81,14 +81,14 @@ def run_mksr(func_name,
         print(f"Expand variable x{var_id}")
         print(f"Current equation: {equa}")
         
-        X, C, equa = GenerateData(equa = equa,
+        X, C, equa = generate_data(equa = equa,
                         var_num = var_num, 
                         var_id = var_id, 
                         x_range = x_range, 
                         spl_test_num = spl_test_num, 
                         spl_eval_num = spl_eval_num,
                         c_regression_num = c_regression_num,
-                        NeuroEval = NeuroEval)
+                        neuro_eval = neuro_eval)
         for cid in range(len(C)):
             if skip_step_2:
                 skip_step_2 -= 1
@@ -112,7 +112,7 @@ def run_mksr(func_name,
                                                         eta = 0.999)
                 result = max(all_eqs, key=lambda x: x[1])[0]
                 result = f"({result})"
-                result = ReplaceXwithXi(result, f"x{var_id}")
+                result = replace_x_with_xi(result, f"x{var_id}")
                 equa = equa.replace(f'c{cid}', result)
             current_result[str((var_id, cid))] = equa          
         equa = str(sy.simplify(equa))
