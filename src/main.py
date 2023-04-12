@@ -1,7 +1,7 @@
 # import sys
 import numpy as np
 import torch
-from spl.spl_train import run_spl
+from svsr.spl.spl_train import run_spl
 from mksr.mksr_solver import run_mksr
 
 # problem specification:
