@@ -11,7 +11,7 @@ x_range = {'x0': (-5, 5), 'x1': (-5, 5), 'x2': (-5, 5), 'x3': (2, 3)}
 grammars = ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A', 
             'A->x', 'A->C',
             'A->exp(x)', 'A->cos(x)', 'A->sin(x)']
-nt_nodes = ['A']
+nt_nodes_num = ['A']
 np.random.seed(0)
 
 # hyper-parameter:
@@ -35,7 +35,7 @@ except:
     trainer.load()
     trainer.model.cpu()
     
-def neuro_eval(X):               # assume the NN can eval for any x
+def neuro_eval(X: np.ndarray):               # assume the NN can eval for any x
     if not isinstance(X, torch.Tensor):
         X = torch.tensor(X.T, dtype = torch.float32)
     return trainer.model(X).detach().numpy()
@@ -46,9 +46,9 @@ if __name__ == "__main__":
                     var_num = var_num,
                     x_range = x_range,
                     grammars = grammars,
-                    nt_nodes = nt_nodes,
+                    nt_nodes_num = nt_nodes_num,
                     neuro_eval = neuro_eval,
-                    SVSR = run_spl,
+                    svsr = run_spl,
                     spl_eval_num = spl_eval_num,
                     spl_test_num = spl_test_num,
                     c_regression_num = c_regression_num)

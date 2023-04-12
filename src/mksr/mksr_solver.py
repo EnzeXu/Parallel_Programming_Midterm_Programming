@@ -6,38 +6,33 @@ import re
 import json
 
 
-def replace_number_with_C(text):
+def replace_number_with_C(text: str) -> str:
     text = text.replace("**2", "**TWO") # protect ^2
     pattern = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)"
     text = re.sub(pattern, "C", text)
     text = text.replace("**TWO", "**2") # protect ^2
     return text
 
-def replace_x_with_xi(text, Xi):
+def replace_x_with_xi(text: str, Xi: str) -> str:
     pattern = r"(?<!e)x"
     return re.sub(pattern, Xi, text)
 
-def generate_data(equa, 
-                 var_num, 
-                 var_id, 
-                 x_range, 
-                 spl_test_num, 
-                 spl_eval_num,
-                 c_regression_num,
-                 neuro_eval):
+def generate_data(equa: str,
+                 c_list: list,
+                 var_num: int, 
+                 var_id: int, 
+                 x_range: tuple, 
+                 spl_test_num: int, 
+                 spl_eval_num: int,
+                 c_regression_num: int,
+                 neuro_eval: callable) -> tuple[np.ndarray, np.ndarray]:
     # Step 1 : generate data. The result is:
     # X : shape = (1, test_num)       the variable x{var_id}'s value
     # C : shape = (c_count, test_num) the corresponding constant value
-    equa = replace_number_with_C(equa)
-    c_count = equa.count('C')
-    c_lst = ['c'+str(i) for i in range(c_count)]
-    for c in c_lst: 
-        equa = equa.replace('C', c, 1)
-    print("After replacing:", equa)
     pivot = np.empty(var_num)
     for vid in range(var_id + 1, var_num):
         pivot[vid] = np.random.uniform(*x_range[f"x{vid}"])
-    C = np.empty((c_count, spl_test_num + spl_eval_num))
+    C = np.empty((len(c_list), spl_test_num + spl_eval_num))
     X = np.empty((1, spl_test_num + spl_eval_num))
     for tid in range(spl_eval_num + spl_test_num):
         cur_x = np.empty((var_num, c_regression_num)) 
@@ -56,17 +51,17 @@ def generate_data(equa,
             for i in range(len(c)): 
                 locals()['c'+str(i)] = c[i]
             return np.linalg.norm(eval(equa) - f_true, 2)
-        c_lst = minimize(eq_test, [1.0] * len(c_lst), method='Powell', tol=1e-6).x.tolist() 
-        C[:, tid] = np.array(c_lst)
-    return X, C, equa
+        c_list = minimize(eq_test, [1.0] * len(c_list), method='Powell', tol=1e-6).x.tolist() 
+        C[:, tid] = np.array(c_list)
+    return X, C
 
-def run_mksr(func_name,
-             var_num,
-             x_range,
-             grammars,
-             nt_nodes,
-             neuro_eval,
-             SVSR,
+def run_mksr(func_name: str,
+             var_num: int,
+             x_range: tuple,
+             grammars: list,
+             nt_nodes_num: int,
+             neuro_eval: callable,
+             svsr: callable,
              spl_eval_num = 90,
              spl_test_num = 10,
              c_regression_num = 100,
@@ -80,8 +75,14 @@ def run_mksr(func_name,
         # now we expand x_{var_id} to the equation.
         print(f"Expand variable x{var_id}")
         print(f"Current equation: {equa}")
-        
-        X, C, equa = generate_data(equa = equa,
+        equa = replace_number_with_C(equa)
+        c_count = equa.count('C')
+        c_list = ['c'+str(i) for i in range(c_count)]
+        for c in c_list: 
+            equa = equa.replace('C', c, 1)
+        print("After replacing:", equa)
+        X, C = generate_data(equa = equa,
+                        c_list = c_list,
                         var_num = var_num, 
                         var_id = var_id, 
                         x_range = x_range, 
@@ -101,9 +102,9 @@ def run_mksr(func_name,
                 XC = np.append(X, C[cid, :]).reshape(2, spl_test_num + spl_eval_num)
                 train_sample = XC[:, :spl_eval_num]
                 test_sample = XC[:, spl_eval_num:]
-                all_eqs, success_rate, all_times = SVSR(task = f"(x{var_id}, c{cid})", 
+                all_eqs, success_rate, all_times = svsr(task = f"(x{var_id}, c{cid})", 
                                                         grammars = grammars,
-                                                        nt_nodes = nt_nodes,
+                                                        nt_nodes = nt_nodes_num,
                                                         num_run = 1,
                                                         train_sample = train_sample,
                                                         test_sample = test_sample,
