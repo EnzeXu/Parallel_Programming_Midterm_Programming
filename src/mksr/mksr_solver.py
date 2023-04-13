@@ -102,6 +102,8 @@ def run_mksr(
 
     Returns: The expression in str format.
     """
+    if not os.path.exists(f"results/{FUNC_NAME}/mksr"):
+        os.makedirs(f"results/{FUNC_NAME}/mksr")
     record_equation_file_prefix = f"results/{FUNC_NAME}/mksr/equation"
     record_data_file_prefix = f"results/{FUNC_NAME}/mksr/data"
     equation = '0.0'  # any constant
@@ -117,7 +119,7 @@ def run_mksr(
         for c_with_id in c_list:
             equation = equation.replace('C', c_with_id, 1)
         print("After replacing:", equation)
-        if os.path.exists(f"{record_data_file_prefix}X{var_id}.npy") and os.path.exist(f"{record_data_file_prefix}X{var_id}.npy"):
+        if os.path.exists(f"{record_data_file_prefix}X{var_id}.npy") and os.path.exists(f"{record_data_file_prefix}X{var_id}.npy"):
             X = np.load(f"{record_data_file_prefix}X{var_id}.npy")
             C = np.load(f"{record_data_file_prefix}C{var_id}.npy")
         else:
