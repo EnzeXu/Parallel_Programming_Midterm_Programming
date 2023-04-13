@@ -10,6 +10,14 @@ import json
 
 
 def _replace_number_with_capital_c(text: str) -> str:
+    """replace number with capital c
+    
+    Currently, for 'x**2', the 2 should not be regard as constant.
+    Also, reserve all the space.
+    
+    >>> _replace_number_with_capital_c("x0+x1+x4**2+x2+1e-9+10.0 + 11")
+    'x0+x1+x4**2+x2+C+C + C'
+    """
     # TODO(cxt): a more detailed protection rule
     text = text.replace("**2", "**TWO")  # protect ^2
     pattern_scitific_repre = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)[eE][+-]?[0-9]+"
@@ -21,6 +29,11 @@ def _replace_number_with_capital_c(text: str) -> str:
 
 
 def _replace_x_with_xi(text: str, Xi: str) -> str:
+    """replace all x with xi
+    
+    >>> _replace_x_with_xi("x+ x +exp(10)", "x1")
+    'x1+ x1 +exp(10)'
+    """
     pattern = r"(?<!e)x"
     return re.sub(pattern, Xi, text)
 
@@ -171,3 +184,7 @@ def run_mksr(
             current_result[str((var_id, cid))] = equation
         equation = str(sy.simplify(equation))
     return equation
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
