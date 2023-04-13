@@ -12,8 +12,10 @@ import json
 def _replace_number_with_capital_c(text: str) -> str:
     # TODO(cxt): a more detailed protection rule
     text = text.replace("**2", "**TWO")  # protect ^2
-    pattern = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)"
-    text = re.sub(pattern, "C", text)
+    pattern_scitific_repre = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)[eE][+-]?[0-9]+"
+    text = re.sub(pattern_scitific_repre, "C", text)
+    pattern_const = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)([eE][+-]?[0-9]+)?"
+    text = re.sub(pattern_const, "C", text)
     text = text.replace("**TWO", "**2")  # protect ^2
     return text
 
@@ -32,6 +34,7 @@ def _generate_data(
         data_num: int,
         c_regression_num: int,
         neuro_eval: callable,
+        record_file_prefix: str,
 ) -> tuple[np.ndarray, np.ndarray]:
     """generate data for svsr
 
@@ -59,13 +62,17 @@ def _generate_data(
         # print(cur_x)
         for v in range(var_num):
             globals()[f'x{v}'] = cur_x[v]
-
+        # print(equation)
         def eq_test(c):
             for i in range(len(c)):
                 locals()['c'+str(i)] = c[i]
             return np.linalg.norm(eval(equation) - f_true, 2)
         c_list = minimize(eq_test, [1.0] * len(c_list),
                           method='Powell', tol=1e-6).x.tolist()
+        # print("gg")
+        # cheat_result = [cur_x[vid, 0], 2*cur_x[vid, 0]]
+        # print(c_list, cheat_result)
+        # print(eq_test(c_list), eq_test(cheat_result))
         C[:, tid] = np.array(c_list)
     return X, C
 
@@ -81,8 +88,6 @@ def run_mksr(
         SPL_TRAIN_NUM: int = 90,
         SPL_TEST_NUM: int = 10,
         C_REGRESSION_NUM: int = 100,
-        skip_step_1: int | None = None,
-        skip_step_2: int | None = None,
 ) -> str:
     """doing multi variable symbolic regression according to the neuro_eval.
 
@@ -119,7 +124,7 @@ def run_mksr(
         for c_with_id in c_list:
             equation = equation.replace('C', c_with_id, 1)
         print("After replacing:", equation)
-        if os.path.exists(f"{record_data_file_prefix}X{var_id}.npy") and os.path.exists(f"{record_data_file_prefix}X{var_id}.npy"):
+        if os.path.exists(f"{record_data_file_prefix}X{var_id}.npy") and os.path.exists(f"{record_data_file_prefix}C{var_id}.npy"):
             X = np.load(f"{record_data_file_prefix}X{var_id}.npy")
             C = np.load(f"{record_data_file_prefix}C{var_id}.npy")
         else:
@@ -131,7 +136,8 @@ def run_mksr(
                 x_range=X_RANGE,
                 data_num=SPL_TEST_NUM + SPL_TRAIN_NUM,
                 c_regression_num=C_REGRESSION_NUM,
-                neuro_eval=neuro_eval)
+                neuro_eval=neuro_eval,
+                record_file_prefix=f"{record_data_file_prefix}X{var_id}")
             np.save(f"{record_data_file_prefix}X{var_id}.npy", X)
             np.save(f"{record_data_file_prefix}C{var_id}.npy", C)
         for cid in range(len(C)):
@@ -152,7 +158,7 @@ def run_mksr(
                     num_run=1,
                     train_sample=train_sample,
                     test_sample=test_sample,
-                    transplant_step=500,
+                    transplant_step=1000,
                     num_transplant=2,
                     eta=0.999)
                 del success_rate, all_times
