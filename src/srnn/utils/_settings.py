@@ -5,11 +5,11 @@ FuncSettings = {
     'test1': {
         'func': lambda x: x[:, 0] * x[:, 1] + x[:, 0] + 2 * x[:, 1] / x[:, 2] + x[:, 2] * exp(x[:, 1]),
         'type': 'normal',
-        'sample_times': 8000,
+        'sample_times': 3000,
         'x_len': 3,
         'model': {
             'MLP': {
-                'layer_size': [3, 512, 512, 1]
+                'layer_size': [3, 64, 64, 64, 64, 64, 64, 1]
             },
             'Taylor': {
                 'in_features':      3, 
@@ -23,7 +23,7 @@ FuncSettings = {
     'test2': {
         'func': lambda x: x[:, 0]**2 * x[:, 1] + x[:, 0] + 2 * x[:, 1],
         'type': 'normal',
-        'sample_times': 100000,
+        'sample_times': 500,
         'x_len': 2,
         'model': {
             'MLP': {
@@ -41,7 +41,7 @@ FuncSettings = {
     'test3': {
         'func': lambda x: sin(x[:,0]) * x[:,1] + 3,
         'type': 'normal',
-        'sample_times': 8000,
+        'sample_times': 1000,
         'x_len': 2,
         'model': {
             'MLP': {
@@ -59,7 +59,7 @@ FuncSettings = {
     'test4': {
         'func': lambda x: sin(x[:,0]) * (2.5 * x[:,1] ** 2 + cos(x[:,1])) + x[:,1] + 3,
         'type': 'normal',
-        'sample_times': 8000,
+        'sample_times': 1000,
         'x_len': 2,
         'model': {
             'MLP': {
