@@ -24,10 +24,11 @@ TestSettings = {
             }
         },
         'mlp_fit_times': 10000,
-        'spl_train_num': 180,
-        'spl_test_num': 20,
+        'data_train_num': 180,
+        'data_test_num': 20,
         'c_regression_num': 200,
-        'spl': {
+        'svsr_config': {
+            'method': 'spl',
             'num_run': 1,
             'transplant_step': 1000,
             'num_transplant': 2,
@@ -64,10 +65,11 @@ TestSettings = {
             }
         },
         'mlp_fit_times': 4000,
-        'spl_train_num': 180,
-        'spl_test_num': 20,
+        'data_train_num': 180,
+        'data_test_num': 20,
         'c_regression_num': 200,
-        'spl': {
+        'svsr_config': {
+            'method': 'spl',
             'num_run': 1,
             'transplant_step': 1000,
             'num_transplant': 2,
@@ -104,10 +106,11 @@ TestSettings = {
             }
         },
         'mlp_fit_times': 4000,
-        'spl_train_num': 180,
-        'spl_test_num': 20,
+        'data_train_num': 180,
+        'data_test_num': 20,
         'c_regression_num': 200,
-        'spl': {
+        'svsr_config': {
+            'method': 'spl',
             'num_run': 1,
             'transplant_step': 1000,
             'num_transplant': 2,
@@ -144,10 +147,11 @@ TestSettings = {
             }
         },
         'mlp_fit_times': 4000,
-        'spl_train_num': 180,
-        'spl_test_num': 20,
+        'data_train_num': 180,
+        'data_test_num': 20,
         'c_regression_num': 200,
-        'spl': {
+        'svsr_config': {
+            'method': 'spl',
             'num_run': 1,
             'transplant_step': 1000,
             'num_transplant': 2,
@@ -156,6 +160,53 @@ TestSettings = {
                 'A->A+A', 'A->A-A', 'A->A*A', 
                 'A->A/A', 'A->x', 'A->C',
                 'A->exp(x)', 'A->cos(x)', 'A->sin(x)'
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        },
+    },
+  
+    'test-div': {
+        'func': lambda x: 1 / (1 + x[:, 1]**2) + 2,
+        'type': 'normal',
+        'sample_times': 5000,
+        'x_num': 2,
+        'x_range': {
+            'x0': (-5, 5),
+            'x1': (-1, 1),
+        },
+        'model': {
+            'MLP': {
+                'layer_size': [2, 64, 64, 64, 64, 64, 64, 1],
+            },
+            'Taylor': {
+                'in_features':      3, 
+                'out_features':     1, 
+                'order':            3, 
+                'rank':             8
+            }
+        },
+        'mlp_fit_times': 600,
+        'data_train_num': 180,
+        'data_test_num': 20,
+        'c_regression_num': 200,
+        'svsr_config': {
+            'method': 'bf',
+            'x_range': {
+                'x0': (-5, 5),
+                'x1': (-1, 1),
+            },
+            'node_limit': 8,
+            'hash_num': 5,        
+            
+            'num_run': 1,
+            'transplant_step': 1000,
+            'num_transplant': 2,
+            'eta': 0.99999,
+            'grammars': [
+                'A->A+A', 'A->A-A', 'A->A*A', 
+                'A->A/A', 'A->x', 'A->C',
             ],
             'nt_nodes': {
                 'A'

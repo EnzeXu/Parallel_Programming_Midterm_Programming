@@ -6,6 +6,7 @@ import sys
 
 from srnn.utils import Trainer
 from svsr.spl.train import run_spl
+from svsr.brute_force import run_bfsr
 from mksr.solver import MKSR
 from config.testconfig import TestSettings
 
@@ -16,7 +17,7 @@ if __name__ == "__main__":
     except:
         print("please specify test name.\n"
               "e.g. python3 main.py test2\n"
-              "e.g. make run test=test2")
+              "e.g. make run test=test2\n")
         exit(0)
     trainer = Trainer(
         cfg=cfg,
@@ -38,19 +39,25 @@ if __name__ == "__main__":
     def neuro_eval(x: np.ndarray):              
         """assume the NN can eval for any x
         """
+        if func_name=="test-div":
+            x = x.T
+            ground_truth_result = cfg['func'](x).reshape((len(x), 1))
+            x = x.T
+            return ground_truth_result
         torch_x = torch.tensor(x.T, dtype=torch.float32)
         nn_result = trainer.model(torch_x).detach().numpy()
         if __debug__:
             global diff
             x = x.T
-            ground_truth_result = (x[:, 0]**2 * x[:, 1] + x[:, 0] + 2 * x[:, 1]).reshape((len(x), 1))
+            ground_truth_result = cfg['func'](x).reshape((len(x), 1))
             x = x.T
             diff.extend((nn_result - ground_truth_result).flat)
         return nn_result.reshape(len(nn_result))
+    svsr_method = run_spl if cfg['svsr_config']['method'] == 'spl' else run_bfsr
     mksr_model = MKSR(
         func_name=func_name,
         neuro_eval=neuro_eval,
-        svsr=run_spl,
+        svsr_method=svsr_method,
         random_seed=10,
         **cfg)
     mksr_model.run()

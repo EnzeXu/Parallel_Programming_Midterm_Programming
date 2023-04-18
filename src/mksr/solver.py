@@ -46,9 +46,9 @@ class MKSR:
         x_num: int,
         x_range: dict,
         neuro_eval: callable,
-        svsr: callable,
-        spl_train_num: int = 90,
-        spl_test_num: int = 10,
+        svsr_method: callable,
+        data_train_num: int = 90,
+        data_test_num: int = 10,
         c_regression_num: int = 100,
         random_seed: int = 10,
         **kwargs,
@@ -74,9 +74,9 @@ class MKSR:
         self.x_num = x_num
         self.x_range = x_range
         self.neuro_eval = neuro_eval
-        self.svsr = svsr
-        self.spl_train_num = spl_train_num
-        self.spl_test_num = spl_test_num
+        self.svsr_method = svsr_method
+        self.data_train_num = data_train_num
+        self.data_test_num = data_test_num
         self.c_regression_num = c_regression_num
         self.np_rng = np.random.default_rng(seed=random_seed)
         self.equation = ""
@@ -97,7 +97,7 @@ class MKSR:
             X : shape = (1, test_num)       the variable x{var_id}'s value
             C : shape = (c_count, test_num) the corresponding constant value
         """
-        data_num = self.spl_test_num + self.spl_train_num
+        data_num = self.data_test_num + self.data_train_num
         pivot = np.empty(self.x_num)
         for vid in range(var_id + 1, self.x_num):
             pivot[vid] = self.np_rng.uniform(*self.x_range[f"x{vid}"])
@@ -133,7 +133,6 @@ class MKSR:
         record_equation_file_prefix = f"results/{self.func_name}/mksr/equation"
         record_data_file_prefix = f"results/{self.func_name}/mksr/data"
         equation = '0.0'  # any constant
-        current_result = dict()
         for var_id in range(self.x_num):
             # `equa` consider variable [0, var_id),
             # now we expand x_{var_id} to the equation.
@@ -160,22 +159,19 @@ class MKSR:
                 else:
                     # Step 2 : for each constant, do sr using spl
                     XC = np.append(X, C[cid, :]).reshape(
-                        2, self.spl_test_num + self.spl_train_num)
-                    train_sample = XC[:, :self.spl_train_num]
-                    test_sample = XC[:, self.spl_train_num:]
-                    print(self.kwargs)
-                    all_eqs, _, _ = self.svsr(
+                        2, self.data_test_num + self.data_train_num)
+                    train_sample = XC[:, :self.data_train_num]
+                    test_sample = XC[:, self.data_train_num:]
+                    result = self.svsr_method(
                         task=f"(x{var_id}, c{cid})",
                         train_sample=train_sample,
                         test_sample=test_sample,
-                        **self.kwargs['spl'])
-                    result = max(all_eqs, key=lambda x: x[1])[0]
+                        **self.kwargs['svsr_config'])
                     result = f"({result})"
                     result = _replace_x_with_xi(result, f"x{var_id}")
                     equation = equation.replace(f'c{cid}', result)
                     with open(save_name, "w") as f:
                         f.write(equation)
-                current_result[str((var_id, cid))] = equation
             equation = str(sy.simplify(equation))
         self.equation = equation
 

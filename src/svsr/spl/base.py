@@ -216,8 +216,8 @@ class SplBase:
             # return action with largest ucb score
             A = np.zeros(nA, dtype=float)  
             best_action = valid_action[np.argmax(policy_valid)]
-            A[best_action] += 0.8
-            A[valid_action] += float(0.2 / len(valid_action))
+            A[best_action] += 0.5
+            A[valid_action] += float(0.5 / len(valid_action))
             return A
         return policy_fn
 
@@ -324,6 +324,7 @@ class SplBase:
 
                 self.backpropogate(state, action, reward)
                 reward_his.append(best_solution[1])
+                # print(i_episode, best_solution)
         
                 
         return reward_his, best_solution, self.good_modules

@@ -3,17 +3,22 @@ from sympy import simplify
 from scipy.optimize import minimize
 from numpy import cos, sin, log, exp, tan, sqrt, pi
 
-def run_bfsr(task, 
-             grammars,
-             train_sample,
-             x_range,
-             node_limit = 8,
-             hash_num = 5):
+
+def run_bfsr(
+        task,
+        train_sample,
+        test_sample,
+        grammars,
+        x_range,
+        node_limit=8,
+        hash_num=5,
+        **kwargs,
+    ) -> str:
     termi = []
     unary = []
     binary = []
     for g in grammars:
-        assert(g[0:3] == 'A->')
+        assert (g[0:3] == 'A->')
         g = g[3:]
         if g.count('A') == 0:
             termi.append(g)
@@ -46,7 +51,8 @@ def run_bfsr(task,
             for i in range(1, num - 1):
                 for eq1 in equa[i]:
                     for eq2 in equa[num - i - 1]:
-                        neq = str((g.replace('A', eq1, 1).replace('A', eq2, 1)))
+                        neq = str(
+                            (g.replace('A', eq1, 1).replace('A', eq2, 1)))
                         val = str(eval(str(neq)))
                         if val not in uniq:
                             uniq.add(val)

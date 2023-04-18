@@ -140,4 +140,5 @@ def run_spl(task,
     if count_success:
         print('success rate :', success_rate)
     
-    return all_eqs, success_rate, all_times
+    result = max(all_eqs, key=lambda x: x[1])[0]
+    return result
