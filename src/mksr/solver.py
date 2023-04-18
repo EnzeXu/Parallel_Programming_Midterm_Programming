@@ -42,17 +42,16 @@ def _replace_x_with_xi(text: str, Xi: str) -> str:
 class MKSR:
     def __init__(
         self,
-        FUNC_NAME: str,
-        VAR_NUM: int,
-        X_RANGE: dict,
-        GRAMMARS: list,
-        NT_NODES: set[str],
+        func_name: str,
+        x_num: int,
+        x_range: dict,
         neuro_eval: callable,
         svsr: callable,
-        SPL_TRAIN_NUM: int = 90,
-        SPL_TEST_NUM: int = 10,
-        C_REGRESSION_NUM: int = 100,
-        random_seed: int = 10
+        spl_train_num: int = 90,
+        spl_test_num: int = 10,
+        c_regression_num: int = 100,
+        random_seed: int = 10,
+        **kwargs,
     ) -> None:
         """Init the MKSR.
 
@@ -71,18 +70,17 @@ class MKSR:
         Returns: 
             The expression in str format.
         """
-        self.FUNC_NAME = FUNC_NAME
-        self.VAR_NUM = VAR_NUM
-        self.X_RANGE = X_RANGE
-        self.GRAMMARS = GRAMMARS
-        self.NT_NODES = NT_NODES
+        self.func_name = func_name
+        self.x_num = x_num
+        self.x_range = x_range
         self.neuro_eval = neuro_eval
         self.svsr = svsr
-        self.SPL_TRAIN_NUM = SPL_TRAIN_NUM
-        self.SPL_TEST_NUM = SPL_TEST_NUM
-        self.C_REGRESSION_NUM = C_REGRESSION_NUM
+        self.spl_train_num = spl_train_num
+        self.spl_test_num = spl_test_num
+        self.c_regression_num = c_regression_num
         self.np_rng = np.random.default_rng(seed=random_seed)
         self.equation = ""
+        self.kwargs = kwargs
 
     def __repr__(self):
         return repr(self.equation)
@@ -90,14 +88,8 @@ class MKSR:
     def _generate_data(
             self,
             equation: str,
-            c_list: list,
-            var_num: int,
+            const_num: int,
             var_id: int,
-            x_range: tuple,
-            data_num: int,
-            c_regression_num: int,
-            neuro_eval: callable,
-            record_file_prefix: str,
     ) -> tuple[np.ndarray, np.ndarray]:
         """generate data for svsr using simpy.optimize.minimize.
 
@@ -105,49 +97,44 @@ class MKSR:
             X : shape = (1, test_num)       the variable x{var_id}'s value
             C : shape = (c_count, test_num) the corresponding constant value
         """
-        pivot = np.empty(var_num)
-        for vid in range(var_id + 1, var_num):
-            pivot[vid] = self.np_rng.uniform(*x_range[f"x{vid}"])
-        C = np.empty((len(c_list), data_num))
+        data_num = self.spl_test_num + self.spl_train_num
+        pivot = np.empty(self.x_num)
+        for vid in range(var_id + 1, self.x_num):
+            pivot[vid] = self.np_rng.uniform(*self.x_range[f"x{vid}"])
+        C = np.empty((const_num, data_num))
         X = np.empty((1, data_num))
         for tid in range(data_num):
-            cur_x = np.empty((var_num, c_regression_num))
-            for vid in range(var_num):
+            cur_x = np.empty((self.x_num, self.c_regression_num))
+            for vid in range(self.x_num):
                 if vid < var_id:
                     cur_x[vid, :] = self.np_rng.uniform(
-                        *x_range[f"x{vid}"], c_regression_num)
+                        *self.x_range[f"x{vid}"], self.c_regression_num)
                 elif vid == var_id:
                     cur_x[vid, :] = X[0, tid] = self.np_rng.uniform(
-                        *x_range[f"x{vid}"])
+                        *self.x_range[f"x{vid}"])
                 else:
                     cur_x[vid, :] = pivot[vid]
-            f_true = neuro_eval(cur_x)
-            # print(cur_x)
-            for v in range(var_num):
+            f_true = self.neuro_eval(cur_x)
+            for v in range(self.x_num):
                 globals()[f'x{v}'] = cur_x[v]
-            # print(equation)
 
             def eq_test(c):
                 for i in range(len(c)):
                     locals()['c'+str(i)] = c[i]
                 return np.linalg.norm(eval(equation) - f_true, 2)
-            c_list = minimize(eq_test, [1.0] * len(c_list),
+            c_list = minimize(eq_test, [1.0] * const_num,
                               method='Powell', tol=1e-6).x.tolist()
-            # print("gg")
-            # cheat_result = [cur_x[vid, 0], 2*cur_x[vid, 0]]
-            # print(c_list, cheat_result)
-            # print(eq_test(c_list), eq_test(cheat_result))
             C[:, tid] = np.array(c_list)
         return X, C
 
     def run(self) -> None:
-        if not os.path.exists(f"results/{self.FUNC_NAME}/mksr"):
-            os.makedirs(f"results/{self.FUNC_NAME}/mksr")
-        record_equation_file_prefix = f"results/{self.FUNC_NAME}/mksr/equation"
-        record_data_file_prefix = f"results/{self.FUNC_NAME}/mksr/data"
+        if not os.path.exists(f"results/{self.func_name}/mksr"):
+            os.makedirs(f"results/{self.func_name}/mksr")
+        record_equation_file_prefix = f"results/{self.func_name}/mksr/equation"
+        record_data_file_prefix = f"results/{self.func_name}/mksr/data"
         equation = '0.0'  # any constant
         current_result = dict()
-        for var_id in range(self.VAR_NUM):
+        for var_id in range(self.x_num):
             # `equa` consider variable [0, var_id),
             # now we expand x_{var_id} to the equation.
             print(f"Expand variable x{var_id}")
@@ -162,16 +149,7 @@ class MKSR:
                 X = np.load(f"{record_data_file_prefix}X{var_id}.npy")
                 C = np.load(f"{record_data_file_prefix}C{var_id}.npy")
             else:
-                X, C = self._generate_data(
-                    equation=equation,
-                    c_list=c_list,
-                    var_num=self.VAR_NUM,
-                    var_id=var_id,
-                    x_range=self.X_RANGE,
-                    data_num=self.SPL_TEST_NUM + self.SPL_TRAIN_NUM,
-                    c_regression_num=self.C_REGRESSION_NUM,
-                    neuro_eval=self.neuro_eval,
-                    record_file_prefix=f"{record_data_file_prefix}X{var_id}")
+                X, C = self._generate_data(equation=equation, const_num=c_count, var_id=var_id)
                 np.save(f"{record_data_file_prefix}X{var_id}.npy", X)
                 np.save(f"{record_data_file_prefix}C{var_id}.npy", C)
             for cid in range(len(C)):
@@ -182,20 +160,15 @@ class MKSR:
                 else:
                     # Step 2 : for each constant, do sr using spl
                     XC = np.append(X, C[cid, :]).reshape(
-                        2, self.SPL_TEST_NUM + self.SPL_TRAIN_NUM)
-                    train_sample = XC[:, :self.SPL_TRAIN_NUM]
-                    test_sample = XC[:, self.SPL_TRAIN_NUM:]
-                    all_eqs, success_rate, all_times = self.svsr(
+                        2, self.spl_test_num + self.spl_train_num)
+                    train_sample = XC[:, :self.spl_train_num]
+                    test_sample = XC[:, self.spl_train_num:]
+                    print(self.kwargs)
+                    all_eqs, _, _ = self.svsr(
                         task=f"(x{var_id}, c{cid})",
-                        grammars=self.GRAMMARS,
-                        nt_nodes=self.NT_NODES,
-                        num_run=1,
                         train_sample=train_sample,
                         test_sample=test_sample,
-                        transplant_step=1000,
-                        num_transplant=2,
-                        eta=0.99)
-                    del success_rate, all_times
+                        **self.kwargs['spl'])
                     result = max(all_eqs, key=lambda x: x[1])[0]
                     result = f"({result})"
                     result = _replace_x_with_xi(result, f"x{var_id}")

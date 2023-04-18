@@ -35,7 +35,7 @@ conda install pytorch torchvision torchaudio cpuonly -c pytorch
 - [x] integrate step 3, 4, 5 (2023.04.06)
 - [ ] reading dso other dissertation
 - [ ] optimizing speed
-- [ ] implement step 1, 2 and combine
+- [x] implement step 1, 2 and combine (2023.04.13)
 
 ### Other's work
 - https://github.com/brendenpetersen/deep-symbolic-optimization
@@ -45,7 +45,8 @@ conda install pytorch torchvision torchaudio cpuonly -c pytorch
 command
 ```sh
 conda activate sr
-python3 src/main.py
+cd run
+make run test=test2
 ```
 2023/04/06
 

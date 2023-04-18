@@ -11,12 +11,12 @@ import time
 import logging
 
 from ._utils import *
-from ._settings import *
 from ..model import *
 
 class Trainer:
     def __init__(
         self,
+        cfg: dict,
         model_mode: nn.Module or str,
         func_name: str,
         batch_size: int = 128,
@@ -39,11 +39,12 @@ class Trainer:
         '''
         # Create Model
         self.func_name = func_name
+        self.cfg = cfg
         set_random_seed(seed)
         if isinstance(model_mode, nn.Module):
             self.model = model_mode
         elif isinstance(model_mode, str):
-            self.model = eval(model_mode)(**FuncSettings[func_name]['model'][model_mode])
+            self.model = eval(model_mode)(**self.cfg['model'][model_mode])
         
         # Create Model Name
         class_name = self.model.__class__.__name__
@@ -109,10 +110,10 @@ class Trainer:
         return accu[0] / accu[1]
     
     def generate_data_iter(self, func_name: str, batch_size: int):
-        cfg = FuncSettings[func_name]
+        cfg = self.cfg
         if cfg['type'] == 'normal':
             data_distr = Uniform(torch.tensor([-5.0]), torch.tensor([5.0]))
-            X = data_distr.sample((cfg['sample_times'], cfg['x_len'])).squeeze(-1)
+            X = data_distr.sample((cfg['sample_times'], cfg['x_num'])).squeeze(-1)
             Y = cfg['func'](X).unsqueeze(-1)
             split = int(len(X) * 0.8)
             trainset = data.TensorDataset(X[:split], Y[:split])

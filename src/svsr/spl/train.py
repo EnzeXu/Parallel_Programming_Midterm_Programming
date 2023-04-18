@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import time
 from .score import simplify_eq, score_with_est
-from .spl_base import SplBase
+from .base import SplBase
 # from .spl_task_utils import *
 
 import warnings
@@ -22,7 +22,8 @@ def run_spl(task,
             transplant_step = 10000, 
             max_len = 50, eta = 0.9999, 
             max_module_init = 10, num_aug = 5, exp_rate = 1/np.sqrt(2), num_transplant = 1, 
-            norm_threshold = 1e-5, count_success = True):
+            norm_threshold = 1e-5, count_success = True,
+            **kwargs):
     """
     Executes the main training loop of Symbolic Physics Learner.
     
