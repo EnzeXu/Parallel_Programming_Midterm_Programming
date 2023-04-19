@@ -253,7 +253,7 @@ class SplBase:
 
 
 
-    def run(self, num_episodes, num_play=50, print_flag=False, print_freq=100):
+    def run(self, num_episodes, num_play=50, print_flag=False, print_freq=100, norm_threshold=1e-5):
         """
         Monte Carlo Tree Search algorithm
         """
@@ -325,6 +325,8 @@ class SplBase:
                 self.backpropogate(state, action, reward)
                 reward_his.append(best_solution[1])
                 # print(i_episode, best_solution)
+            if (best_solution[1] > 1 - norm_threshold):
+                break
         
                 
         return reward_his, best_solution, self.good_modules

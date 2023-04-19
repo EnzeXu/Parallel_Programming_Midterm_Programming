@@ -6,7 +6,7 @@ import sys
 
 from srnn.utils import Trainer
 from svsr.spl.train import run_spl
-from svsr.brute_force import run_bfsr
+from svsr.pesr.solver import run_pesr
 from mksr.solver import MKSR
 from config.testconfig import TestSettings
 
@@ -53,7 +53,12 @@ if __name__ == "__main__":
             x = x.T
             diff.extend((nn_result - ground_truth_result).flat)
         return nn_result.reshape(len(nn_result))
-    svsr_method = run_spl if cfg['svsr_config']['method'] == 'spl' else run_bfsr
+    if cfg['svsr_config']['method'] == 'spl':
+        svsr_method = run_spl
+    elif cfg['svsr_config']['method'] == 'pesr':
+        svsr_method = run_pesr
+    else:
+        raise Exception("No '{cfg['svsr_config']['method']}' svsr method ")
     mksr_model = MKSR(
         func_name=func_name,
         neuro_eval=neuro_eval,

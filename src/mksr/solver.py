@@ -62,10 +62,7 @@ class MKSR:
             grammars:         grammar list. e.g. 'A->A+A'
             nt_nodes:         the set of all non terminal nodes.
             neuro_eval:       the function provided by neuro network to do the evaluation.
-            svsr:             the beneath method to do the single variable regression.
-            spl_train_num:    how many tests needed to train spl.
-            spl_test_num:     how many tests needed to test spl.
-            c_regression_num: how many tests needed to run the minimize.
+            svsr_method:             the beneath method to do the single variable regression.
 
         Returns: 
             The expression in str format.
@@ -166,6 +163,8 @@ class MKSR:
                         task=f"(x{var_id}, c{cid})",
                         train_sample=train_sample,
                         test_sample=test_sample,
+                        x_range=self.x_range[f"x{var_id}"],
+                        np_rng=self.np_rng,
                         **self.kwargs['svsr_config'])
                     result = f"({result})"
                     result = _replace_x_with_xi(result, f"x{var_id}")

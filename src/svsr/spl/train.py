@@ -102,7 +102,8 @@ def run_spl(task,
             _, current_solution, good_modules = spl_model.run(transplant_step, 
                                                               num_play=10, 
                                                               print_flag=True,
-                                                              print_freq=10)
+                                                              print_freq=10,
+                                                              norm_threshold = norm_threshold)
 
             end_time = time.time() - start_time
 
@@ -130,6 +131,8 @@ def run_spl(task,
                     discovery_time = end_time
                     all_times.append(discovery_time)
                 break
+            print()
+            print(f"exp_rate = {exploration_rate}, eta = {eta}", best_solution[0])
 
         all_eqs.append((simplify_eq(best_solution[0]), test_score))
         print('\nround {} complete after {} iterations.'.format(i_test, i_itr+1))

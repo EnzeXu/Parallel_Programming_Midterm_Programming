@@ -168,13 +168,13 @@ TestSettings = {
     },
   
     'test-div': {
-        'func': lambda x: 1 / (1 + x[:, 1]**2) + 2,
+        'func': lambda x: x[:, 1] / (1 + x[:, 1]**2),
         'type': 'normal',
         'sample_times': 5000,
         'x_num': 2,
         'x_range': {
             'x0': (-5, 5),
-            'x1': (-1, 1),
+            'x1': (0, 4),
         },
         'model': {
             'MLP': {
@@ -192,21 +192,25 @@ TestSettings = {
         'data_test_num': 20,
         'c_regression_num': 200,
         'svsr_config': {
-            'method': 'bf',
-            'x_range': {
-                'x0': (-5, 5),
-                'x1': (-1, 1),
-            },
-            'node_limit': 8,
-            'hash_num': 5,        
+            'method': 'spl',
+            'node_limit': 9,
+            'hash_num': 5,     
+            'c_limit': 3,
+            'max_allowed_number': 500,
+            'max_search_number': 2000,
+              
             
             'num_run': 1,
-            'transplant_step': 1000,
-            'num_transplant': 2,
-            'eta': 0.99999,
+            'transplant_step': 10000,
+            'num_transplant': 1,
+            'norm_threshold': 1e-3,
+            'exp_rate': 20000,
+            'eta': 0.9999,
+            'num_aug': 5,
             'grammars': [
                 'A->A+A', 'A->A-A', 'A->A*A', 
                 'A->A/A', 'A->x', 'A->C',
+                'A->sin(A)', 'A->cos(A)'
             ],
             'nt_nodes': {
                 'A'
