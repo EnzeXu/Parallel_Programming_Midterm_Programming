@@ -121,6 +121,8 @@ class MKSR:
                 return np.linalg.norm(eval(equation) - f_true, 2)
             c_list = minimize(eq_test, [1.0] * const_num,
                               method='Powell', tol=1e-6).x.tolist()
+            # if const_num == 2:
+            #     print(eq_test(c_list), eq_test([X[0, tid], 2]))
             C[:, tid] = np.array(c_list)
         return X, C
 

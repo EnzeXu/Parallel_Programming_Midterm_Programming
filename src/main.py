@@ -39,11 +39,11 @@ if __name__ == "__main__":
     def neuro_eval(x: np.ndarray):              
         """assume the NN can eval for any x
         """
-        if func_name=="test-div":
+        if func_name=="test-div": # for test-div, use ground truth
             x = x.T
             ground_truth_result = cfg['func'](x).reshape((len(x), 1))
             x = x.T
-            return ground_truth_result
+            return np.array(ground_truth_result.flat)
         torch_x = torch.tensor(x.T, dtype=torch.float32)
         nn_result = trainer.model(torch_x).detach().numpy()
         if __debug__:
@@ -52,7 +52,7 @@ if __name__ == "__main__":
             ground_truth_result = cfg['func'](x).reshape((len(x), 1))
             x = x.T
             diff.extend((nn_result - ground_truth_result).flat)
-        return nn_result.reshape(len(nn_result))
+        return np.array(nn_result.flat)
     if cfg['svsr_config']['method'] == 'spl':
         svsr_method = run_spl
     elif cfg['svsr_config']['method'] == 'pesr':
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         func_name=func_name,
         neuro_eval=neuro_eval,
         svsr_method=svsr_method,
-        random_seed=10,
+        random_seed=2,
         **cfg)
     mksr_model.run()
     print(f"discovered euqation: {mksr_model}")

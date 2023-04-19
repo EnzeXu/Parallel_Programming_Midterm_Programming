@@ -93,7 +93,6 @@ def score_with_est(eq, tree_size, data, t_limit = 1.0, eta=0.999):
             elif c_count >= 4:    ## discourage over complicated numerical estimations
                 return 0, eq
             else:                  ## with numerical values: coefficient estimationwith Powell method
-
                 # eq = prune_poly_c(eq)
                 c_lst = ['c'+str(i) for i in range(c_count)]
                 for c in c_lst: 

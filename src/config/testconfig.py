@@ -168,13 +168,13 @@ TestSettings = {
     },
   
     'test-div': {
-        'func': lambda x: x[:, 1] / (1 + x[:, 1]**2),
+        'func': lambda x: x[:, 0] / (1 + x[:, 1]**2) + 2,
         'type': 'normal',
         'sample_times': 5000,
         'x_num': 2,
         'x_range': {
             'x0': (-5, 5),
-            'x1': (0, 4),
+            'x1': (-3, 3),
         },
         'model': {
             'MLP': {
@@ -201,16 +201,15 @@ TestSettings = {
               
             
             'num_run': 1,
-            'transplant_step': 10000,
-            'num_transplant': 1,
-            'norm_threshold': 1e-3,
-            'exp_rate': 20000,
-            'eta': 0.9999,
+            'transplant_step': 2000,
+            'num_transplant': 2,
+            # 'norm_threshold': 1e-5,
+            'exp_rate': 5/np.sqrt(2),
+            'eta': 0.999,
             'num_aug': 5,
             'grammars': [
-                'A->A+A', 'A->A-A', 'A->A*A', 
-                'A->A/A', 'A->x', 'A->C',
-                'A->sin(A)', 'A->cos(A)'
+                'A->(A)+(A)', 'A->(A)-(A)', 'A->(A)*(A)', 
+                'A->(A)/(A)', 'A->x', 'A->C',
             ],
             'nt_nodes': {
                 'A'
