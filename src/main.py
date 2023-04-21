@@ -4,7 +4,7 @@ import torch
 from array import array
 import sys
 
-from srnn.utils import Trainer
+from srnn.mlnn.trainer import Trainer
 from svsr.spl.train import run_spl
 from svsr.pesr.solver import run_pesr
 from mksr.solver import MKSR
@@ -19,21 +19,9 @@ if __name__ == "__main__":
               "e.g. python3 main.py test2\n"
               "e.g. make run test=test2\n")
         exit(0)
-    trainer = Trainer(
-        cfg=cfg,
-        model_mode='MLP',
-        func_name=func_name,
-        batch_size=128,
-        lr=0.0001,
-        seed=0,
-        cuda=0,
-    )
-    try:
-        trainer.load()
-    except:
-        trainer.fit(cfg['mlp_fit_times'])
-        trainer.load()
-        trainer.model.cpu()
+    trainer = Trainer(**cfg)
+    trainer.run()
+    neuro_eval = trainer.get_eval()
     if __debug__:
         diff = array('d')
     def neuro_eval(x: np.ndarray):              
