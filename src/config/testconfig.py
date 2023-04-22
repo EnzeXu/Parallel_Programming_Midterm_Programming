@@ -170,7 +170,7 @@ TestSettings = {
     'test5': {
         'func': lambda x: x[:, 0] / (1 + x[:, 1]**2) + 2,
         'type': 'normal',
-        'sample_times': 40000,
+        'sample_times': 5000,
         'x_num': 2,
         'x_range': {
             'x0': (-5, 5),
