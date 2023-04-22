@@ -11,6 +11,7 @@ from mksr.solver import MKSR
 from config.testconfig import TestSettings
 
 if __name__ == "__main__":
+    # step 0 : load the config
     try:
         func_name = sys.argv[1]
         cfg = TestSettings[func_name]
@@ -19,25 +20,40 @@ if __name__ == "__main__":
               "e.g. python3 main.py test2\n"
               "e.g. make run test=test2\n")
         exit(0)
-        
+    
+    # step 1 : generate data
+    data_num = cfg['data_num']
+    x_num = cfg['common']['x_num']
+    x_range = cfg['common']['x_range']
+    np_rng = np.random.default_rng(seed=2)
+    target_func = cfg['target_func']
+    data_x = np.ndarray((data_num, x_num), dtype=np.float32)
+    for vid in range(x_num):
+        data_x[:, vid] = np_rng.uniform(*x_range[f"x{vid}"], data_num)
+    data_y = target_func(data_x)
+    
+    # step 2 : train the neuro-network and get a eval function
     trainer = Trainer(
         func_name=func_name,
-        random_seed=2,
-        **cfg)
+        data_x = data_x, 
+        data_y = data_y,
+        **cfg['common'],
+        **cfg['srnn_config'])
     trainer.run()
-    neuro_eval = trainer.get_eval()
     
-    if cfg['svsr_config']['method'] == 'spl':
-        svsr_method = run_spl
-    elif cfg['svsr_config']['method'] == 'pesr':
-        svsr_method = run_pesr
-    else:
-        raise Exception("No '{cfg['svsr_config']['method']}' svsr method ")
+    neuro_eval = trainer.get_eval()
+    svsr_method = run_spl
+
+    # step 3 : run mksr method with underlying method run_spl
     mksr_model = MKSR(
         func_name=func_name,
+        random_seed=2,
         neuro_eval=neuro_eval,
         svsr_method=svsr_method,
-        random_seed=2,
-        **cfg)
+        svsr_cfg = cfg['svsr_config'],
+        **cfg['common'],
+        **cfg['mvsr_config'])
     mksr_model.run()
+    
+    # step 4 : print the result
     print(f"discovered euqation: {str(mksr_model)}")

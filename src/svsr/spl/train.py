@@ -7,26 +7,25 @@ from .base import SplBase
 
 import warnings
 
-warnings.filterwarnings("ignore", category=RuntimeWarning) 
-warnings.filterwarnings("ignore", category=FutureWarning) 
-warnings.filterwarnings("ignore", category=DeprecationWarning) 
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
-
-def run_spl(task, 
-            grammars, 
-            nt_nodes, 
-            num_run, 
+def run_spl(task,
+            grammars,
+            nt_nodes,
+            num_run,
             train_sample,
             test_sample,
-            transplant_step = 10000, 
-            max_len = 50, eta = 0.9999, 
-            max_module_init = 10, num_aug = 5, exp_rate = 1/np.sqrt(2), num_transplant = 1, 
-            norm_threshold = 1e-5, count_success = True,
-            **kwargs):
+            transplant_step=10000,
+            max_len=50, eta=0.9999,
+            max_module_init=10, num_aug=5, exp_rate=1/np.sqrt(2), num_transplant=1,
+            norm_threshold=1e-5, count_success=True,
+            ):
     """
     Executes the main training loop of Symbolic Physics Learner.
-    
+
     Parameters
     ----------
     task : String object.
@@ -53,7 +52,7 @@ def run_spl(task,
         numerical error tolerance for norm calculation, a very small value. 
     count_success : Boolean object. 
         if success rate is recorded. 
-        
+
     Returns
     -------
     all_eqs: List<Str>
@@ -67,8 +66,8 @@ def run_spl(task,
     num_success = 0
     all_times = []
     all_eqs = []
-    
-    ## number of module max size increase after each transplantation 
+
+    # number of module max size increase after each transplantation
     module_grow_step = (max_len - max_module_init) / num_transplant
 
     for i_test in range(num_run):
@@ -87,32 +86,32 @@ def run_spl(task,
 
         for i_itr in range(num_transplant):
 
-            spl_model = SplBase(data_sample = train_sample,
-                                base_grammars = grammars, 
-                                aug_grammars = aug_grammars, 
-                                nt_nodes = nt_nodes, 
-                                max_len = max_len, 
-                                max_module = max_module,
-                                aug_grammars_allowed = num_aug,
-                                func_score = score_with_est, 
-                                exploration_rate = exploration_rate, 
-                                eta = eta)
+            spl_model = SplBase(data_sample=train_sample,
+                                base_grammars=grammars,
+                                aug_grammars=aug_grammars,
+                                nt_nodes=nt_nodes,
+                                max_len=max_len,
+                                max_module=max_module,
+                                aug_grammars_allowed=num_aug,
+                                func_score=score_with_est,
+                                exploration_rate=exploration_rate,
+                                eta=eta)
 
-
-            _, current_solution, good_modules = spl_model.run(transplant_step, 
-                                                              num_play=10, 
+            _, current_solution, good_modules = spl_model.run(transplant_step,
+                                                              num_play=10,
                                                               print_flag=True,
                                                               print_freq=10,
-                                                              norm_threshold = norm_threshold)
+                                                              norm_threshold=norm_threshold)
 
             end_time = time.time() - start_time
 
             if not best_modules:
                 best_modules = good_modules
             else:
-                best_modules = sorted(list(set(best_modules + good_modules)), key = lambda x: x[1])
+                best_modules = sorted(
+                    list(set(best_modules + good_modules)), key=lambda x: x[1])
             aug_grammars = [x[0] for x in best_modules[-num_aug:]]
-            
+
             # print([simplify_eq(x[2]) for x in best_modules[-num_aug:]])
 
             reward_his.append(best_solution[1])
@@ -123,8 +122,9 @@ def run_spl(task,
             max_module += module_grow_step
             exploration_rate *= 5
 
-            # check if solution is discovered. Early stop if it is. 
-            test_score = score_with_est(simplify_eq(best_solution[0]), 0, test_sample, eta = eta)[0]
+            # check if solution is discovered. Early stop if it is.
+            test_score = score_with_est(simplify_eq(
+                best_solution[0]), 0, test_sample, eta=eta)[0]
             if test_score >= 1 - norm_threshold:
                 num_success += 1
                 if discovery_time == 0:
@@ -132,16 +132,17 @@ def run_spl(task,
                     all_times.append(discovery_time)
                 break
             print()
-            print(f"exp_rate = {exploration_rate}, eta = {eta}", best_solution[0])
+            print(
+                f"exp_rate = {exploration_rate}, eta = {eta}", best_solution[0])
 
         all_eqs.append((simplify_eq(best_solution[0]), test_score))
         print('\nround {} complete after {} iterations.'.format(i_test, i_itr+1))
         print('best solution: {}'.format(simplify_eq(best_solution[0])))
         print('test score: {}'.format(test_score))
-    
+
     success_rate = num_success / num_run
     if count_success:
         print('success rate :', success_rate)
-    
+
     result = max(all_eqs, key=lambda x: x[1])[0]
     return result

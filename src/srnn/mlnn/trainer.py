@@ -11,10 +11,11 @@ class Trainer:
     def __init__(
         self,
         func_name: str,
-        func,
-        sample_times,
         x_range,
         x_num,
+        data_x,
+        data_y,
+        epochs,
         layer = 'Linear',     # Linear | Taylor ;
         activation = 'ReLU',  # ReLU   | Tanh   ;
         layer_size = [2, 128, 256, 128, 1],
@@ -22,14 +23,14 @@ class Trainer:
         dropout = 0.5,
         batch_size = 128,
         lr = 0.003,
-        epochs = 1000,
-        random_seed = None,
-        **kwargs,
     ) -> None:
         self.func_name = func_name
-        self.func = func
-        self.sample_times = sample_times
-        self.val_times = max(sample_times // 4, 1)
+        self.sample_times = int(len(data_x) * 0.8)
+        self.val_times = len(data_x) - self.sample_times
+        self.train_x = torch.from_numpy(data_x[:self.sample_times, ...])
+        self.val_x = torch.from_numpy(data_x[self.sample_times:, ...])        
+        self.train_y = torch.from_numpy(data_y[:self.sample_times, ...])
+        self.val_y = torch.from_numpy(data_y[self.sample_times:, ...])
         self.x_range = x_range
         self.x_num = x_num
         self.layer = layer
@@ -40,7 +41,6 @@ class Trainer:
         self.batch_size = batch_size
         self.lr = lr
         self.epochs = epochs
-        self.np_rng = np.random.default_rng(seed=random_seed)
         self.mlnn = MLNN(
             layer_size = self.layer_size,
             layer = self.layer, 
@@ -48,7 +48,7 @@ class Trainer:
             batchnorm = self.batchnorm
         )
         class_name = self.mlnn.__class__.__name__
-        self.model_name = f'{class_name}-{func_name}-bs{batch_size}-lr{lr}-seed{random_seed}'
+        self.model_name = f'{class_name}-{func_name}-bs{batch_size}-lr{lr}'
         self._make_dirs()
 
     def run(self) -> None:
@@ -63,18 +63,10 @@ class Trainer:
         print('train on', device)
         self.mlnn.to(device)
 
-        all_x = np.ndarray((self.sample_times + self.val_times, self.x_num), dtype=np.float32)
-        for vid in range(self.x_num):
-            all_x[:, vid] = self.np_rng.uniform(*self.x_range[f"x{vid}"], self.sample_times + self.val_times)
-        
-        train_x = torch.from_numpy(all_x[:self.sample_times, ...])
-        val_x = torch.from_numpy(all_x[self.sample_times:, ...])
-        
-        train_x = train_x.squeeze(-1)
-        train_y = self.func(train_x).unsqueeze(-1).to(device)
-        
-        val_x = val_x.squeeze(-1)
-        val_y = self.func(val_x).unsqueeze(-1).to(device)
+        train_x = self.train_x.squeeze(-1)
+        train_y = self.train_y.unsqueeze(-1).to(device)
+        val_x = self.val_x.squeeze(-1)
+        val_y = self.val_y.unsqueeze(-1).to(device)
         
         best_epoch, min_loss = 0, float('Inf')
             

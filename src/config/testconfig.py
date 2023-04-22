@@ -168,48 +168,34 @@ TestSettings = {
     },
   
     'test5': {
-        'func': lambda x: x[:, 0] / (1 + x[:, 1]**2) + 2,
-        'type': 'normal',
-        'sample_times': 5000,
-        'x_num': 2,
-        'x_range': {
-            'x0': (-5, 5),
-            'x1': (-3, 3),
-        },
-        'model': {
-            'MLP': {
-                'layer_size': [2, 64, 64, 64, 64, 64, 64, 1],
+        'target_func': lambda x: x[:, 0] / (1 + x[:, 1]**2) + 2,
+        'data_num' : 8000,
+        'common': {
+            'x_num': 2,
+            'x_range': {
+                'x0': (-5, 5),
+                'x1': (-3, 3),
             },
-            'Taylor': {
-                'in_features':      3, 
-                'out_features':     1, 
-                'order':            3, 
-                'rank':             8
-            }
         },
-        'mlp_fit_times': 600,
-        'data_train_num': 180,
-        'data_test_num': 20,
-        'c_regression_num': 200,
+        'srnn_config': {
+            'epochs': 1500,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+        },
+        'mvsr_config': {
+            'data_train_num': 180,
+            'data_test_num': 20,
+            'c_regression_num': 200,
+        },
         'svsr_config': {
-            'method': 'spl',
-            'node_limit': 9,
-            'hash_num': 5,     
-            'c_limit': 3,
-            'max_allowed_number': 500,
-            'max_search_number': 2000,
-              
-            
             'num_run': 1,
             'transplant_step': 2000,
             'num_transplant': 2,
-            # 'norm_threshold': 1e-5,
             'exp_rate': 5/np.sqrt(2),
             'eta': 0.999,
-            'num_aug': 5,
             'grammars': [
-                'A->(A)+(A)', 'A->(A)-(A)', 'A->(A)*(A)', 
-                'A->(A)/(A)', 'A->x', 'A->C',
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)', 
+                'A->(A/A)', 'A->x', 'A->C',
             ],
             'nt_nodes': {
                 'A'
