@@ -176,22 +176,23 @@ TestSettings = {
         }
     },
     'toggle': {    
-        'traj_num': 3000,
+        'traj_num': 10000,
         'traj_points': 10,
         'params': [4, 4, 3, 3],
         'dt': 0.01,        
         'common': {
             'x_num': 2,
+            'y_num': 2,
             'x_range': {
                 'x0': (0, 2),
                 'x1': (0, 2),
             },
         },
         'srnn_config':  {
-            'epochs': 2000,
-            'layer': 'Linear',
-            'activation': 'ReLU',
-            'layer_size': [2, 128, 256, 128, 1],
+            'epochs': 10000,
+            'layer': 'Taylor',
+            'activation': 'Tanh',
+            'layer_size': [2, 128, 256, 128, 2],
         },
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {

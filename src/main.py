@@ -24,6 +24,7 @@ if __name__ == "__main__":
 
     # step 1 : generate data
     x_num = cfg['common']['x_num']
+    y_num = cfg['common'].get('y_num', 1)
     x_range = cfg['common']['x_range']
     np_rng = np.random.default_rng(seed=2)
     if func_name == "toggle":
@@ -34,9 +35,9 @@ if __name__ == "__main__":
             traj_points=cfg['traj_points'],
         )
         data_x = data_x.numpy()
-        data_y = data_y.numpy()[:, 0]
-        print(data_x.shape)
-        print(data_y.shape)
+        data_y = data_y.numpy()
+        # print(data_x.shape)
+        # print(data_y.shape)
     else:
         data_num = cfg['data_num']
         target_func = cfg['target_func']
@@ -45,7 +46,7 @@ if __name__ == "__main__":
             data_x[:, vid] = np_rng.uniform(*x_range[f"x{vid}"], data_num)
         data_y = target_func(data_x)
 
-    print(f"data_y : {data_y}")
+    # print(f"data_y : {data_y}")
 
     # step 2 : train the neuro-network and get a eval function
     trainer = Trainer(
@@ -56,26 +57,30 @@ if __name__ == "__main__":
         **cfg['srnn_config'])
     trainer.run()
 
-    neuro_eval = trainer.get_eval()
-    svsr_method = run_spl
-    
+    eqs = {}
+    for y_id in range(y_num):
+        neuro_eval = trainer.get_eval(y_id)
+        svsr_method = run_spl
+        
 
-    # def neuro_eval(x):
-    #     def target_func(x):
-    #         return 4 / (1 + x[:, 1] ** 3) - x[:, 0]
-    #     y = target_func(x.T)
-    #     return np.array(y.flat)
+        # def neuro_eval(x):
+        #     def target_func(x):
+        #         return 4 / (1 + x[:, 1] ** 3) - x[:, 0]
+        #     y = target_func(x.T)
+        #     return np.array(y.flat)
 
-    # step 3 : run mksr method with underlying method run_spl
-    mksr_model = MKSR(
-        func_name=func_name,
-        random_seed=2,
-        neuro_eval=neuro_eval,
-        svsr_method=svsr_method,
-        svsr_cfg=cfg['svsr_config'],
-        **cfg['common'],
-        **cfg['mvsr_config'])
-    mksr_model.run()
+        # step 3 : run mksr method with underlying method run_spl
+        mksr_model = MKSR(
+            func_name=f"{func_name}/mksr_y{y_id}",
+            random_seed=2,
+            neuro_eval=neuro_eval,
+            svsr_method=svsr_method,
+            svsr_cfg=cfg['svsr_config'],
+            **cfg['common'],
+            **cfg['mvsr_config'])
+        mksr_model.run()
 
-    # step 4 : print the result
-    print(f"discovered euqation: {str(mksr_model)}")
+        eqs[f'y{y_id}'] = str(mksr_model)
+print("="*50)
+for y, eq in eqs.items():
+    print(f"discovered for {y}: {eq}")

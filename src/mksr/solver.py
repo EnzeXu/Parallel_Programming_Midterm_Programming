@@ -66,6 +66,7 @@ class MKSR:
         data_test_num: int = 10,
         c_regression_num: int = 100,
         random_seed = None,
+        **kwargs,
     ) -> None:
         """Init the MKSR.
 

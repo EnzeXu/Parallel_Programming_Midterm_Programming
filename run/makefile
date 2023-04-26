@@ -6,7 +6,8 @@ rerun:
 	python3 ../src/main.py $(test)
 
 rerun-mksr:
-	rm -rf results/$(test)/mksr
+	rm -rf results/$(test)/mksr_y0
+	rm -rf results/$(test)/mksr_y1
 	python3 ../src/main.py $(test)
 
 clean:

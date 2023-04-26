@@ -13,6 +13,7 @@ class Trainer:
         func_name: str,
         x_range,
         x_num,
+        y_num,
         data_x,
         data_y,
         epochs,
@@ -25,14 +26,15 @@ class Trainer:
         lr = 0.003,
     ) -> None:
         self.func_name = func_name
-        self.sample_times = int(len(data_x) * 0.8)
-        self.val_times = len(data_x) - self.sample_times
-        self.train_x = torch.from_numpy(data_x[:self.sample_times, ...])
-        self.val_x = torch.from_numpy(data_x[self.sample_times:, ...])        
-        self.train_y = torch.from_numpy(data_y[:self.sample_times, ...])
-        self.val_y = torch.from_numpy(data_y[self.sample_times:, ...])
+        self.train_times = int(len(data_x) * 0.8)
+        self.val_times = len(data_x) - self.train_times
+        self.train_x = torch.from_numpy(data_x[:self.train_times, ...])
+        self.val_x = torch.from_numpy(data_x[self.train_times:, ...])        
+        self.train_y = torch.from_numpy(data_y[:self.train_times, ...])
+        self.val_y = torch.from_numpy(data_y[self.train_times:, ...])
         self.x_range = x_range
         self.x_num = x_num
+        self.y_num = y_num
         self.layer = layer
         self.layer_size = layer_size
         self.activation = activation
@@ -63,10 +65,10 @@ class Trainer:
         print('train on', device)
         self.mlnn.to(device)
 
-        train_x = self.train_x.squeeze(-1)
-        train_y = self.train_y.unsqueeze(-1).to(device)
-        val_x = self.val_x.squeeze(-1)
-        val_y = self.val_y.unsqueeze(-1).to(device)
+        train_x = self.train_x.clone().reshape((self.train_times, self.x_num))
+        train_y = self.train_y.clone().reshape((self.train_times, self.y_num)).to(device)
+        val_x = self.val_x.clone().reshape((self.val_times, self.x_num))
+        val_y = self.val_y.clone().reshape((self.val_times, self.x_num)).to(device)
         
         best_epoch, min_loss = 0, float('Inf')
             
@@ -94,11 +96,11 @@ class Trainer:
             info_best = f'best epoch: {best_epoch},  min loss:{min_loss:.4e}'
             print(info_epoch + info_best)
     
-    def get_eval(self):
+    def get_eval(self, y_id):
         self.mlnn.eval()
         def eval(x: np.ndarray):
             torch_x = torch.tensor(x.T, dtype=torch.float32)
-            nn_result = self.mlnn(torch_x).detach().numpy()
+            nn_result = self.mlnn(torch_x).detach().numpy()[:, y_id]
             # for x0, x1, y in zip(torch_x[:, 0], torch_x[:, 1], nn_result):
             #     print(x0, x1, y)
             return np.array(nn_result.flat)
