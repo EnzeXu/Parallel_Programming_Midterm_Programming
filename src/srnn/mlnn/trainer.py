@@ -106,6 +106,7 @@ class Trainer:
     
     def _load(self):
         self.mlnn.load_state_dict(torch.load(self.model_pth + self.model_name, map_location = 'cpu'))
+        self.mlnn.eval()
     
     def _make_dirs(self):
         self.results_pth = f'./results/{self.func_name}/'
