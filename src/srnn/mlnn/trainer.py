@@ -95,9 +95,12 @@ class Trainer:
             print(info_epoch + info_best)
     
     def get_eval(self):
+        self.mlnn.eval()
         def eval(x: np.ndarray):
             torch_x = torch.tensor(x.T, dtype=torch.float32)
             nn_result = self.mlnn(torch_x).detach().numpy()
+            # for x0, x1, y in zip(torch_x[:, 0], torch_x[:, 1], nn_result):
+            #     print(x0, x1, y)
             return np.array(nn_result.flat)
         return eval
     

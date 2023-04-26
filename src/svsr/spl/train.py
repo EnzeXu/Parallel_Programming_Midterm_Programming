@@ -118,7 +118,7 @@ def run_spl(task,
 
             if current_solution[1] > best_solution[1]:
                 best_solution = current_solution
-            # print(best_solution)
+                # print(best_solution[0])
             max_module += module_grow_step
             exploration_rate *= 5
 
@@ -132,8 +132,7 @@ def run_spl(task,
                     all_times.append(discovery_time)
                 break
             print()
-            print(
-                f"exp_rate = {exploration_rate}, eta = {eta}", best_solution[0])
+            print(f"exp_rate = {exploration_rate}, eta = {eta}, exp = {best_solution[0]}")
 
         all_eqs.append((simplify_eq(best_solution[0]), test_score))
         print('\nround {} complete after {} iterations.'.format(i_test, i_itr+1))

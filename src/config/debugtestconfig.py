@@ -1,5 +1,18 @@
 from torch import sin, cos, log, exp
-from ._dynamic import *
+import numpy as np
+
+def _Lorenz(x: np.ndarray, t) -> np.ndarray:
+    dx = np.zeros_like(x)
+    dx[0] = 10.0*(x[1] - x[0])
+    dx[1] = 28.0*x[0] - x[1] - x[0]*x[2]
+    dx[2] = x[0]*x[1] - 3.0*x[2]
+    return dx
+
+def _Duffing(x: np.ndarray, t) -> np.ndarray:
+    dx = np.zeros_like(x)
+    dx[0] = x[1]
+    dx[1] = x[0] - x[0]**3
+    return dx
 
 TestSettings = {
     'test1': {
@@ -204,7 +217,7 @@ TestSettings = {
     },
     
     'Lorenz': {
-        'func': Lorenz,
+        'func': _Lorenz,
         'type': 'ode',
         'dt': 0.01,
         't_f': 1000,
@@ -223,7 +236,7 @@ TestSettings = {
     },
     
     'Duffing': {
-        'func': Duffing,
+        'func': _Duffing,
         'type': 'ode',
         'dt': 0.01,
         't_f': 1000,

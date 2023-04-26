@@ -7,6 +7,14 @@ from numpy import sin, cos, log, exp
 import sympy as sy
 import re
 
+def _process(equa) -> str:
+    """make equation more simple
+    examples
+    >>> _process(sy.simplify('2*(x**4 + 1)**0.5'))
+    (4*x**4 + 4)**0.5
+    """
+    # TODO
+    return equa
 
 def _replace_number_with_capital_c(text: str) -> str:
     """replace number with capital c
@@ -20,10 +28,16 @@ def _replace_number_with_capital_c(text: str) -> str:
     """
     # TODO(cxt): a more detailed protection rule
     text = text.replace("**2", "**TWO")  # protect ^2
+    text = text.replace("**3", "**THREE")  # protect ^2
+    text = text.replace("**4", "**FOUR")  # protect ^2
+    text = text.replace("**0.5", "**SQRT")  # protect sqrt
     pattern_scitific_repre = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)[eE][+-]?[0-9]+"
     text = re.sub(pattern_scitific_repre, "C", text)
     pattern_const = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)([eE][+-]?[0-9]+)?"
     text = re.sub(pattern_const, "C", text)
+    text = text.replace("**THREE", "**3")  # protect ^2
+    text = text.replace("**FOUR", "**4")  # protect ^2
+    text = text.replace("**SQRT", "**0.5")  # protect sqrt
     text = text.replace("**TWO", "**2")  # protect ^2
     return text
 
@@ -171,7 +185,7 @@ class MKSR:
                     equation = equation.replace(f'c{cid}', result)
                     with open(save_name, "w") as f:
                         f.write(equation)
-            equation = str(sy.simplify(equation))
+            equation = str(_process(sy.simplify(equation)))
         self.equation = equation
 
 if __name__ == "__main__":
