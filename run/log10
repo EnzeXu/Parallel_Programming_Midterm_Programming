@@ -1,0 +1,64 @@
+python3 ../src/main.py toggle
+Expand variable x0
+Current equation: 0.0
+After replacing: c0
+task (x0, c0) round 0
+Episode 1000/10000, current best reward 0.994009182882745.Episode 2000/10000, current best reward 0.994009182882745.Episode 3000/10000, current best reward 0.994009182882745.Episode 4000/10000, current best reward 0.994009182882745.Episode 5000/10000, current best reward 0.994009182882745.Episode 6000/10000, current best reward 0.994009182882745.Episode 7000/10000, current best reward 0.994009182882745.Episode 8000/10000, current best reward 0.994009182882745.Episode 9000/10000, current best reward 0.994009182882745.Episode 10000/10000, current best reward 0.994009182882745.
+round 0 complete after 1 iterations.
+best solution: 0.1260603089 - 1.0906208737*x
+test score: 0.9999922930773408
+success rate : 1.0
+Expand variable x1
+Current equation: 0.1260603089 - 1.0906208737*x0
+After replacing: c0 - c1*x0
+task (x1, c0) round 0
+Episode 1000/10000, current best reward 0.981773720106707.Episode 2000/10000, current best reward 0.9861231104862045.Episode 3000/10000, current best reward 0.9861231104862045.Episode 4000/10000, current best reward 0.9861231104862045.Episode 5000/10000, current best reward 0.9861231104862045.Episode 6000/10000, current best reward 0.9861231104862045.Episode 7000/10000, current best reward 0.9861231104862045.Episode 8000/10000, current best reward 0.9890411122752794.Episode 9000/10000, current best reward 0.9930071708854025.Episode 10000/10000, current best reward 0.9930071708854025.
+exp_rate = 35.35533905932737, eta = 0.999, exp = (4.3751627689/(1.0020121126+(x**3)))
+Episode 1000/10000, current best reward 0.9930071708854025.Episode 2000/10000, current best reward 0.9930071708854025.Episode 3000/10000, current best reward 0.9930071708854025.Episode 4000/10000, current best reward 0.9930071708854025.Episode 5000/10000, current best reward 0.9930071708854025.Episode 6000/10000, current best reward 0.9930071708854025.Episode 7000/10000, current best reward 0.9930071708854025.Episode 8000/10000, current best reward 0.9930071708854025.Episode 9000/10000, current best reward 0.9930071708854025.Episode 10000/10000, current best reward 0.9930071708854025.
+exp_rate = 176.77669529663686, eta = 0.999, exp = (4.3751627689/(1.0020121126+(x**3)))
+
+round 0 complete after 2 iterations.
+best solution: 4.3751627689/(x**3 + 1.0020121126)
+test score: 0.9999897120518272
+success rate : 0.0
+task (x1, c1) round 0
+Episode 1000/10000, current best reward 0.9979960267580601.Episode 2000/10000, current best reward 0.9979960267580601.Episode 3000/10000, current best reward 0.9979960267580601.Episode 4000/10000, current best reward 0.9979960267580601.Episode 5000/10000, current best reward 0.9979960267580601.Episode 6000/10000, current best reward 0.9979960267580601.Episode 7000/10000, current best reward 0.9979960267580601.Episode 8000/10000, current best reward 0.9979960267580601.Episode 9000/10000, current best reward 0.9979960267580601.Episode 10000/10000, current best reward 0.9979960267580601.
+round 0 complete after 1 iterations.
+best solution: 1.09105708370000
+test score: 0.9999973881895653
+success rate : 1.0
+Expand variable x1
+Current equation: 0.0
+After replacing: c0
+task (x1, c0) round 0
+Episode 1000/10000, current best reward 0.9829956315325533.Episode 2000/10000, current best reward 0.9829956315325533.Episode 3000/10000, current best reward 0.9829956315325533.Episode 4000/10000, current best reward 0.9829956315325533.Episode 5000/10000, current best reward 0.9829956315325533.Episode 6000/10000, current best reward 0.9829956315325533.Episode 7000/10000, current best reward 0.9829956315325533.Episode 8000/10000, current best reward 0.9829956315325533.Episode 9000/10000, current best reward 0.9829956315325533.Episode 10000/10000, current best reward 0.9829956315325533.
+exp_rate = 35.35533905932737, eta = 0.999, exp = ((1.1691862657-x)/0.9224300866)
+Episode 1000/10000, current best reward 0.9829956315325533.Episode 2000/10000, current best reward 0.9829956315325533.Episode 3000/10000, current best reward 0.9829956315325533.Episode 4000/10000, current best reward 0.9829956315325533.Episode 5000/10000, current best reward 0.9829956315325533.Episode 6000/10000, current best reward 0.9829956315325533.Episode 7000/10000, current best reward 0.9829956315325533.Episode 8000/10000, current best reward 0.9829956315325533.Episode 9000/10000, current best reward 0.9829956315325533.Episode 10000/10000, current best reward 0.9829956315325533.
+exp_rate = 176.77669529663686, eta = 0.999, exp = ((1.1691862657-x)/0.9224300866)
+
+round 0 complete after 2 iterations.
+best solution: 1.26750664650318 - 1.08409300013827*x
+test score: 0.9891285579058641
+success rate : 0.0
+Expand variable x0
+Current equation: 1.26750664650318 - 1.08409300013827*x1
+After replacing: c0 - c1*x1
+task (x0, c0) round 0
+Episode 1000/10000, current best reward 0.9749975052603029.Episode 2000/10000, current best reward 0.9749975052603029.Episode 3000/10000, current best reward 0.9785871381319575.Episode 4000/10000, current best reward 0.982763935037985.Episode 5000/10000, current best reward 0.982763935037985.Episode 6000/10000, current best reward 0.982763935037985.Episode 7000/10000, current best reward 0.982763935037985.Episode 8000/10000, current best reward 0.982763935037985.Episode 9000/10000, current best reward 0.982763935037985.Episode 10000/10000, current best reward 0.982763935037985.
+exp_rate = 35.35533905932737, eta = 0.999, exp = ((((1.2857604454-((x**2)/(5.6640226026+(x**2))))**2)**3)-0.220190962)
+Episode 1000/10000, current best reward 0.9862711360534923.Episode 2000/10000, current best reward 0.9862711360534923.Episode 3000/10000, current best reward 0.9862711360534923.Episode 4000/10000, current best reward 0.9862711360534923.Episode 5000/10000, current best reward 0.9862711360534923.Episode 6000/10000, current best reward 0.9862711360534923.Episode 7000/10000, current best reward 0.9862711360534923.Episode 8000/10000, current best reward 0.9862711360534923.Episode 9000/10000, current best reward 0.9862711360534923.Episode 10000/10000, current best reward 0.9862711360534923.
+exp_rate = 176.77669529663686, eta = 0.999, exp = (((922.6723891787/((7.5966881496+(x**2))**3))**2)-0.1592038955)
+
+round 0 complete after 2 iterations.
+best solution: -0.1592038955 + 4.42944442941046/(5.20300458119524e-6*x**12 + 0.000237153619465682*x**10 + 0.00450395522657424*x**8 + 0.045620191061394*x**6 + 0.259921773613935*x**4 + 0.789817862974397*x**2 + 1)
+test score: 0.9972119203832622
+success rate : 0.0
+task (x0, c1) round 0
+Episode 1000/10000, current best reward 0.9980009997747618.Episode 2000/10000, current best reward 0.9980009997747618.Episode 3000/10000, current best reward 0.9980009997747618.Episode 4000/10000, current best reward 0.9980009997747618.Episode 5000/10000, current best reward 0.9980009997747618.Episode 6000/10000, current best reward 0.9980009997747618.Episode 7000/10000, current best reward 0.9980009997747618.Episode 8000/10000, current best reward 0.9980009997747618.Episode 9000/10000, current best reward 0.9980009997747618.Episode 10000/10000, current best reward 0.9980009997747618.
+round 0 complete after 1 iterations.
+best solution: 0.999998812300000
+test score: 0.9999999996759499
+success rate : 1.0
+==================================================
+discovered for y0: '(-1.0910570837*x0*(x1**3 + 1.0020121126) + 4.3751627689)/(x1**3 + 1.0020121126)'
+discovered for y1: '-0.9999988123*x1 - 0.1592038955 + 4.42944442941046/(5.20300458119524e-6*x0**12 + 0.000237153619465682*x0**10 + 0.00450395522657424*x0**8 + 0.045620191061394*x0**6 + 0.259921773613935*x0**4 + 0.789817862974397*x0**2 + 1)'
