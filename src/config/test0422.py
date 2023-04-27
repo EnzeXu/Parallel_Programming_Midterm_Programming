@@ -184,12 +184,12 @@ TestSettings = {
             'x_num': 2,
             'y_num': 2,
             'x_range': {
-                'x0': (0, 2),
-                'x1': (0, 2),
+                'x0': (0, 4),
+                'x1': (0, 4),
             },
         },
         'srnn_config':  {
-            'epochs': 10000,
+            'epochs': 5000,
             'layer': 'Taylor',
             'activation': 'Tanh',
             'layer_size': [2, 128, 256, 128, 2],
@@ -197,10 +197,10 @@ TestSettings = {
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
             'num_run': 1,
-            'transplant_step': 5000,
+            'transplant_step': 10000,
             'num_transplant': 2,
-            'exp_rate': 5/np.sqrt(2),
-            'eta': 0.99,
+            'exp_rate': 10/np.sqrt(2),
+            'eta': 0.999,
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',

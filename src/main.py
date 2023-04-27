@@ -65,14 +65,14 @@ if __name__ == "__main__":
 
         # def neuro_eval(x):
         #     def target_func(x):
-        #         return 4 / (1 + x[:, 1] ** 3) - x[:, 0]
+        #         return 4 / (1 + x[:, 0] ** 3) - x[:, 1]
         #     y = target_func(x.T)
         #     return np.array(y.flat)
 
         # step 3 : run mksr method with underlying method run_spl
         mksr_model = MKSR(
             func_name=f"{func_name}/mksr_y{y_id}",
-            random_seed=2,
+            random_seed=None,
             neuro_eval=neuro_eval,
             svsr_method=svsr_method,
             svsr_cfg=cfg['svsr_config'],

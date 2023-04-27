@@ -148,6 +148,8 @@ class MKSR:
         record_data_file_prefix = f"results/{self.func_name}/mksr/data"
         equation = '0.0'  # any constant
         for var_id in range(self.x_num):
+            if self.func_name.endswith('y1'):
+                var_id = 1 - var_id
             # `equa` consider variable [0, var_id),
             # now we expand x_{var_id} to the equation.
             print(f"Expand variable x{var_id}")
@@ -158,16 +160,16 @@ class MKSR:
             for c_with_id in c_list:
                 equation = equation.replace('C', c_with_id, 1)
             print("After replacing:", equation)
-            if os.path.exists(f"{record_data_file_prefix}X{var_id}.npy") and os.path.exists(f"{record_data_file_prefix}C{var_id}.npy"):
+            if False and os.path.exists(f"{record_data_file_prefix}X{var_id}.npy") and os.path.exists(f"{record_data_file_prefix}C{var_id}.npy"):
                 X = np.load(f"{record_data_file_prefix}X{var_id}.npy")
                 C = np.load(f"{record_data_file_prefix}C{var_id}.npy")
             else:
                 X, C = self._generate_data(equation=equation, const_num=c_count, var_id=var_id)
-                np.save(f"{record_data_file_prefix}X{var_id}.npy", X)
-                np.save(f"{record_data_file_prefix}C{var_id}.npy", C)
+                # np.save(f"{record_data_file_prefix}X{var_id}.npy", X)
+                # np.save(f"{record_data_file_prefix}C{var_id}.npy", C)
             for cid in range(len(C)):
                 save_name = f"{record_equation_file_prefix}_x{var_id}_c{cid}"
-                if os.path.exists(save_name):
+                if False and os.path.exists(save_name):
                     with open(save_name, "r") as f:
                         equation = f.read()
                 else:
@@ -184,8 +186,8 @@ class MKSR:
                     result = f"({result})"
                     result = _replace_x_with_xi(result, f"x{var_id}")
                     equation = equation.replace(f'c{cid}', result)
-                    with open(save_name, "w") as f:
-                        f.write(equation)
+                    # with open(save_name, "w") as f:
+                    #     f.write(equation)
             equation = str(_process(sy.simplify(equation)))
         self.equation = equation
 

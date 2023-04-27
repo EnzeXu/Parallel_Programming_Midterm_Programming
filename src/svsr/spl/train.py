@@ -100,7 +100,7 @@ def run_spl(task,
             _, current_solution, good_modules = spl_model.run(transplant_step,
                                                               num_play=10,
                                                               print_flag=True,
-                                                              print_freq=10,
+                                                              print_freq=1000,
                                                               norm_threshold=norm_threshold)
 
             end_time = time.time() - start_time
