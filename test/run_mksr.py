@@ -56,7 +56,11 @@ def main(args):
     y_num = cfg['common']['y_num']
     x_num = cfg['common']['x_num']
     
-    eval_dict = {}
+    eval_dict = {
+        "sin": np.sin,
+        "cos": np.cos,
+        "exp": np.exp,
+    }
     for x_id in range(x_num):
         eval_dict[f"x{x_id}"] = x_test[:, x_id]
     trainer = Trainer(
@@ -68,26 +72,30 @@ def main(args):
     trainer.run()
     for i_test in range(num_test):
         print("\rTest {}/{}.".format(i_test, num_test))
-        eqs = {}
-        neuro_eval = trainer.get_eval(0) # since only one y
-        svsr_method = run_spl        
-        mksr_model = MKSR(
-            func_name=task,
-            random_seed=None,
-            neuro_eval=neuro_eval,
-            svsr_method=svsr_method,
-            svsr_cfg=cfg['svsr_config'],
-            **cfg['common'],
-            **cfg['mvsr_config'])
-        mksr_model.run()
-        # eval:
-        from numpy import sin, cos, exp
-        eq = str(mksr_model)
-        
-        y_pred = eval(eq, eval_dict)
-        mse = np.linalg.norm((y_pred - y_test) / y_test.max(), 2) / y_test.shape[0]
-        print("eq:", eq)
-        print("mse:", mse)
+        try:
+            eqs = {}
+            neuro_eval = trainer.get_eval(0) # since only one y
+            svsr_method = run_spl        
+            mksr_model = MKSR(
+                func_name=task,
+                random_seed=None,
+                neuro_eval=neuro_eval,
+                svsr_method=svsr_method,
+                svsr_cfg=cfg['svsr_config'],
+                **cfg['common'],
+                **cfg['mvsr_config'])
+            mksr_model.run()
+            # eval:
+            eq = str(mksr_model)
+            
+            y_pred = eval(eq, eval_dict)
+            mse = np.linalg.norm((y_pred - y_test) / y_test.max(), 2) / y_test.shape[0]
+            print("eq:", eq)
+            print("mse:", mse)
+        except:
+            print("crashed")
+            mse = 1e9
+            eq = "crashed"
         if mse < norm_threshold:
             print("Success!")
             num_success += 1
