@@ -99,7 +99,7 @@ def main(args):
     if save_eqs:
         output_file = open(output_folder + task + '.txt', 'w')
         for mse, eqs in all_eqs:
-            output_file.write(f"{mse}, {eq}\n")
+            output_file.write(f"{mse}, {eqs}\n")
         output_file.write('success rate : {:.0%}'.format(num_success / num_test))
         output_file.close()
 
