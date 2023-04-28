@@ -56,6 +56,7 @@ class Trainer:
     def run(self) -> None:
         try:
             self._load()
+            self.mlnn.eval()
             return
         except:
             pass
@@ -95,6 +96,8 @@ class Trainer:
             info_epoch = f'Epoch: {epoch},  train loss:{train_loss.item():.4e},  val loss:{val_loss.item():.4e}  '
             info_best = f'best epoch: {best_epoch},  min loss:{min_loss:.4e}'
             print(info_epoch + info_best)
+        self.mlnn.to('cpu')
+        self.mlnn.eval()
     
     def get_eval(self, y_id):
         self.mlnn.eval()
@@ -108,7 +111,6 @@ class Trainer:
     
     def _load(self):
         self.mlnn.load_state_dict(torch.load(self.model_pth + self.model_name, map_location = 'cpu'))
-        self.mlnn.eval()
     
     def _make_dirs(self):
         self.results_pth = f'./results_srnn/{self.func_name}/'

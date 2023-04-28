@@ -27,7 +27,7 @@ TestSettings = {
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
             'num_run': 1,
-            'transplant_step': 3000,
+            'transplant_step': 7000,
             'num_transplant': 2,
             'exp_rate': 1/np.sqrt(2),
             'eta': 0.99,
@@ -52,7 +52,7 @@ TestSettings = {
             },
         },
         'srnn_config':  {
-            'epochs': 1500,
+            'epochs': 2000,
             'layer': 'Linear',
             'activation': 'ReLU',
             'layer_size': [2, 128, 256, 128, 1],
@@ -60,10 +60,10 @@ TestSettings = {
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
             'num_run': 1,
-            'transplant_step': 2000,
+            'transplant_step': 7000,
             'num_transplant': 2,
-            'exp_rate': 5/np.sqrt(2),
-            'eta': 0.999,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
@@ -72,7 +72,139 @@ TestSettings = {
             'nt_nodes': {
                 'A'
             },
-        }
+        },
+    },
+    'Jin-3': { 'target_func': lambda x:  0.2 * x[:, 0]**3 + 1.5 * x[:, 1]**3 - 1.2 * x[:, 1] - 0.5 * x[:, 0],
+        'data_num': 8000,
+        'common': {
+            'x_num': 2,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-3, 3),
+                'x1': (-3, 3),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [2, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 7000,
+            'num_transplant': 2,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->(A**2)', 'A->(A**3)'
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        },
+    },
+    'Jin-4': { 'target_func': lambda x:  1.5 * np.exp(x[:, 0]) + 5.0 * np.cos(x[:, 1]),
+        'data_num': 8000,
+        'common': {
+            'x_num': 2,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-3, 3),
+                'x1': (-3, 3),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [2, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 7000,
+            'num_transplant': 2,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->sin(A)', 'A->cos(A)', 'A->exp(A)'
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        },
+    },
+    'Jin-5': { 'target_func': lambda x:  6.0 * np.sin(x[:, 0]) * np.cos(x[:, 1]),
+        'data_num': 8000,
+        'common': {
+            'x_num': 2,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-3, 3),
+                'x1': (-3, 3),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [2, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 7000,
+            'num_transplant': 2,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->sin(A)', 'A->cos(A)', 'A->exp(A)'
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        },
+    },
+    'Jin-6': { 'target_func': lambda x:  1.35 * x[:, 0] * x[:, 1] + 5.5 * np.sin((x[:, 0] - 1) * (x[:, 1] - 1)),
+        'data_num': 8000,
+        'common': {
+            'x_num': 2,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-3, 3),
+                'x1': (-3, 3),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [2, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 7000,
+            'num_transplant': 2,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->sin(A)', 'A->cos(A)', 'A->exp(A)'
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        },
     },
 }
 
@@ -93,4 +225,9 @@ exponential = make_function(function=_protected_exponent, name='exp', arity=1)
 
 gp_jin_cfg = {
     'Jin-1': ("add", "sub", "mul", "div", power2, power3), 
+    'Jin-2': ("add", "sub", "mul", "div", power2, power3), 
+    'Jin-3': ("add", "sub", "mul", "div", power2, power3), 
+    'Jin-4': ("add", "sub", "mul", "div", 'sin', 'cos', exponential), 
+    'Jin-5': ("add", "sub", "mul", "div", 'sin', 'cos', exponential), 
+    'Jin-6': ("add", "sub", "mul", "div", 'sin', 'cos', exponential), 
 }

@@ -81,6 +81,7 @@ def main(args):
             **cfg['mvsr_config'])
         mksr_model.run()
         # eval:
+        from numpy import sin, cos, exp
         eq = str(mksr_model)
         
         y_pred = eval(eq, eval_dict)
@@ -92,14 +93,13 @@ def main(args):
             num_success += 1
         else:
             print("Failed")
-        all_eqs.append(eq)
+        all_eqs.append((mse, eq))
         
         
     if save_eqs:
         output_file = open(output_folder + task + '.txt', 'w')
-        for eqs in all_eqs:
-            for y, eq in eqs.items():
-                output_file.write(f"{y}: {eq}\n")
+        for mse, eqs in all_eqs:
+            output_file.write(f"{mse}, {eq}\n")
         output_file.write('success rate : {:.0%}'.format(num_success / num_test))
         output_file.close()
 

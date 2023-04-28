@@ -72,25 +72,26 @@ def main(args):
         gp_eq = str(est_gp._program)
         
         end_time = time.time() - start_time
-        all_eqs.append(gp_eq)
+        all_eqs.append((-1, gp_eq))
         
         
         try: 
             f_pred = est_gp.predict(x_test)
-
-            print(np.linalg.norm(f_pred - f_test, 2) / f_test.shape[0])
+            mse = np.linalg.norm((f_pred - f_test) / f_test.max(), 2) / f_test.shape[0]
+            print(mse)
             print(gp_eq)
             
-            if np.linalg.norm(f_pred - f_test, 2) / f_test.shape[0] <= norm_threshold:
+            if mse <= norm_threshold:
                 num_success += 1
                 all_times.append(end_time)
+            all_eqs[-1] = (mse, all_eqs[-1][1])
         except NameError:
             continue 
 
     if save_eqs:
         output_file = open(output_folder + task + '.txt', 'w')
-        for eq in all_eqs:
-            output_file.write(eq + '\n')
+        for mse, eqs in all_eqs:
+            output_file.write(f"{mse}, {eq}\n")
         output_file.write('success rate : {:.0%}'.format(num_success / num_test))
         output_file.close()
 
