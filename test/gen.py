@@ -16,6 +16,7 @@ for funcname, cfg in TestSettings.items():
     for vid in range(x_num):
         data_x[:, vid] = np_rng.uniform(*x_range[f"x{vid}"], data_num)
     data_y = target_func(data_x)
+    print("data_num:", data_num)
     print(data_x[:3, ...])
     print(data_y[:3, ...])
     np.save(f"data/{funcname}_x.npy", data_x)

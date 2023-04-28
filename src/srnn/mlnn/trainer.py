@@ -68,7 +68,7 @@ class Trainer:
         train_x = self.train_x.clone().reshape((self.train_times, self.x_num))
         train_y = self.train_y.clone().reshape((self.train_times, self.y_num)).to(device)
         val_x = self.val_x.clone().reshape((self.val_times, self.x_num))
-        val_y = self.val_y.clone().reshape((self.val_times, self.x_num)).to(device)
+        val_y = self.val_y.clone().reshape((self.val_times, self.y_num)).to(device)
         
         best_epoch, min_loss = 0, float('Inf')
             
@@ -111,7 +111,7 @@ class Trainer:
         self.mlnn.eval()
     
     def _make_dirs(self):
-        self.results_pth = f'./results/{self.func_name}/'
+        self.results_pth = f'./results_srnn/{self.func_name}/'
         self.model_pth = self.results_pth + f'models/'
         
         pths = [self.model_pth]

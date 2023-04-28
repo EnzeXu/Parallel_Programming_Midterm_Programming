@@ -94,15 +94,15 @@ class MKSR:
         self.equation = ""
         self.svsr_cfg = svsr_cfg
 
-    def __repr__(self):
-        return repr(self.equation)
+    def __str__(self):
+        return self.equation
 
     def _generate_data(
             self,
             equation: str,
             const_num: int,
             var_id: int,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ):
         """generate data for svsr using simpy.optimize.minimize.
 
         Returns:
@@ -142,10 +142,10 @@ class MKSR:
         return X, C
 
     def run(self) -> None:
-        if not os.path.exists(f"results/{self.func_name}/mksr"):
-            os.makedirs(f"results/{self.func_name}/mksr")
-        record_equation_file_prefix = f"results/{self.func_name}/mksr/equation"
-        record_data_file_prefix = f"results/{self.func_name}/mksr/data"
+        # if not os.path.exists(f"results/{self.func_name}/mksr"):
+        #     os.makedirs(f"results/{self.func_name}/mksr")
+        # record_equation_file_prefix = f"results/{self.func_name}/mksr/equation"
+        # record_data_file_prefix = f"results/{self.func_name}/mksr/data"
         equation = '0.0'  # any constant
         for var_id in range(self.x_num):
             if self.func_name.endswith('y1'):
@@ -168,8 +168,9 @@ class MKSR:
                 # np.save(f"{record_data_file_prefix}X{var_id}.npy", X)
                 # np.save(f"{record_data_file_prefix}C{var_id}.npy", C)
             for cid in range(len(C)):
-                save_name = f"{record_equation_file_prefix}_x{var_id}_c{cid}"
-                if False and os.path.exists(save_name):
+                # save_name = f"{record_equation_file_prefix}_x{var_id}_c{cid}"
+                # if os.path.exists(save_name):
+                if False:
                     with open(save_name, "r") as f:
                         equation = f.read()
                 else:

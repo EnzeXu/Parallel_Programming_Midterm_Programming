@@ -18,55 +18,25 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 data_folder = 'data/'
 output_folder = 'results_gp/'
 
-parser = argparse.ArgumentParser(description='dsr')
+parser = argparse.ArgumentParser(description='gp')
 parser.add_argument(
     '--task',
-    default='nguyen-1',
-    type=str, help="""please select the benchmark task from the list 
-                      [nguyen-1, nguyen-2, nguyen-3, nguyen-4, nguyen-5, nguyen-6, 
-                       nguyen-7, nguyen-8, nguyen-9, nguyen-10, nguyen-11, nguyen-12, 
-                       nguyen-1c, nguyen-2c, nguyen-5c, nguyen-8c, nguyen-9c]""")
-parser.add_argument(
-    '--num_test',
-    default=100,
-    type=int, help='number of tests performed, default 100')
-parser.add_argument(
-    '--population',
-    default=2000,
-    type=int, help='number of initial populations in GP, default 2000')
-parser.add_argument(
-    '--generation',
-    default=20,
-    type=int, help='number of generations in GP, default 20')
-parser.add_argument(
-    '--const',
-    default=True,
-    type=bool, help='if there is anny constant to be estimated')
-parser.add_argument(
-    '--norm_threshold',
-    default=1e-4,
-    type=float, help='the highest MSE for testing to assert a succesful discovery resultm defaul 1e-4')
-parser.add_argument(
-    '--save_solutions',
-    default=True,
-    type=bool, help='whether or not save discovered equations, default true')
+    default='??',
+    type=str, help="""please select the benchmark task from the list []""")
 args = parser.parse_args()
 
 
-variables = ['x', 'y', 'z']
+variables = [f"x{i}" for i in range(10)]
 
 
 def main(args):
     task = args.task
-    num_test = args.num_test
-    population = args.population
-    generation = args.generation
-    norm_threshold = args.norm_threshold
-    save_eqs = args.save_solutions
-    if args.const:
-        range_const = (-10, 10)
-    else:
-        range_const = None
+    num_test = 10
+    population = 2000
+    generation = 20
+    norm_threshold = 1e-4
+    save_eqs = True
+    range_const = (-10, 10)
 
     all_times = []
     all_eqs = []
@@ -121,12 +91,12 @@ def main(args):
         output_file = open(output_folder + task + '.txt', 'w')
         for eq in all_eqs:
             output_file.write(eq + '\n')
+        output_file.write('success rate : {:.0%}'.format(num_success / num_test))
         output_file.close()
 
     print()
     print('final result:')
     print('success rate :', "{:.0%}".format(num_success / num_test))
-    print('average discovery time is', np.round(np.mean(all_times), 3), 'seconds')
 
 
 if __name__ == '__main__':

@@ -12,13 +12,14 @@ TestSettings = {
         'data_num': 8000,
         'common': {
             'x_num': 2,
+            'y_num': 1,
             'x_range': {
                 'x0': (-3, 3),
                 'x1': (-3, 3),
             },
         },
         'srnn_config':  {
-            'epochs': 1500,
+            'epochs': 2000,
             'layer': 'Linear',
             'activation': 'ReLU',
             'layer_size': [2, 128, 256, 128, 1],
@@ -26,10 +27,10 @@ TestSettings = {
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
             'num_run': 1,
-            'transplant_step': 2000,
+            'transplant_step': 3000,
             'num_transplant': 2,
-            'exp_rate': 5/np.sqrt(2),
-            'eta': 0.999,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
@@ -44,6 +45,7 @@ TestSettings = {
         'data_num': 8000,
         'common': {
             'x_num': 2,
+            'y_num': 1,
             'x_range': {
                 'x0': (-3, 3),
                 'x1': (-3, 3),
@@ -76,6 +78,9 @@ TestSettings = {
 
 from gplearn.functions import make_function
 
+def _protected_exponent(x):
+    with np.errstate(over='ignore'):
+        return np.where(np.abs(x) < 100, np.exp(x), 0.)
 
 def _power2(x):
     return x**2
@@ -84,6 +89,8 @@ def _power3(x):
 
 power2 = make_function(function=_power2, name='power2', arity=1)
 power3 = make_function(function=_power3, name='power3', arity=1)
+exponential = make_function(function=_protected_exponent, name='exp', arity=1)
+
 gp_jin_cfg = {
     'Jin-1': ("add", "sub", "mul", "div", power2, power3), 
 }
