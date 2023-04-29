@@ -1,6 +1,7 @@
 __pycache__
 others
-logs
+log*
 .vscode
 results
-*/data
+data
+deep-symbolic-optimization

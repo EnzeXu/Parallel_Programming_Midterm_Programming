@@ -1,0 +1,11 @@
+0.00030127998027555095, add(mul(power3(x0), mul(2.834, x0)), div(add(add(sub(add(add(add(add(add(add(add(add(add(mul(power3(x0), mul(2.834, x0)), power3(x0)), mul(x0, -2.373)), mul(x0, x1)), power3(x0)), mul(mul(2.834, x0), x1)), x0), power2(x0)), power3(x0)), power3(x0)), mul(2.834, x0)), mul(x0, -2.373)), power3(x0)), mul(x0, -2.373)))
+0.00034110954310039243, add(add(power2(power2(x0)), sub(add(power2(x0), sub(mul(-3.291, x0), sub(sub(sub(power2(x0), div(x1, add(-6.174, x0))), div(x1, sub(-6.174, x0))), x0))), div(add(power2(power2(x0)), power2(sub(power2(x0), x0))), sub(-6.174, x0)))), power2(power2(x0)))
+0.0002148171396342868, sub(add(sub(sub(power2(mul(x0, x0)), mul(sub(2.634, 3.215), sub(sub(div(sub(sub(x0, power2(x0)), power3(x0)), 1.480), x1), x1))), power3(x0)), power2(sub(div(power2(x0), -5.781), mul(x0, x0)))), sub(mul(mul(sub(2.634, 3.215), sub(div(div(power2(x0), -5.781), 1.480), x1)), sub(div(power2(x0), 2.634), x1)), power2(x0)))
+nan, add(sub(add(add(sub(power2(power2(x0)), x0), mul(power3(sub(x0, x0)), power2(power3(power2(div(power2(sub(x0, power2(x0))), mul(x0, x1))))))), add(sub(power2(x0), x1), sub(power2(x0), x1))), power3(x0)), power2(power2(x0)))
+0.0004497935250401497, sub(sub(power2(power2(x0)), sub(add(x0, sub(sub(power3(x0), power2(x0)), mul(x0, add(x0, x0)))), power2(power2(x0)))), add(x1, x1))
+0.0002146148782610009, add(sub(add(div(add(sub(power2(x0), add(x1, x0)), power2(power2(x0))), div(x1, x1)), power2(power2(x0))), sub(power3(x0), div(x0, add(2.577, power3(power2(x0)))))), div(power3(power2(x0)), add(add(1.008, add(1.461, power2(x0))), sub(add(x1, x0), -9.861))))
+0.00031123662410944544, sub(sub(mul(mul(2.467, x0), power3(x0)), power3(x0)), add(add(x0, x1), x1))
+0.00018252062549394273, add(add(power2(x0), sub(power2(power2(x0)), power3(x0))), sub(sub(sub(mul(power3(x0), mul(1.389, x0)), x0), sub(sub(sub(sub(x1, power2(div(x1, 3.027))), sub(mul(1.389, x0), x0)), power2(div(x1, 3.027))), sub(x0, x0))), add(x0, x1)))
+0.00022756297563527296, sub(power2(div(power2(x0), 0.854)), sub(power3(x0), add(sub(sub(sub(power2(power2(x0)), add(x1, x1)), x0), x0), power2(x0))))
+0.0004497935250401497, add(add(add(add(power2(x0), sub(power2(power2(x0)), power3(x0))), power2(x0)), sub(power2(x0), x0)), sub(x0, sub(add(add(x0, x1), x1), power2(power2(x0)))))
+success rate : 0%

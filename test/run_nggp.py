@@ -6,19 +6,21 @@ import time
 import numpy as np
 from numpy import *
 import pandas as pd
+from sympy import simplify, expand
 from contextlib import redirect_stdout
-from gplearn.genetic import SymbolicRegressor
-
-from config.alltests import gp_cfg
+from dso import DeepSymbolicOptimizer
 
 warnings.filterwarnings("ignore", category=RuntimeWarning) 
 warnings.filterwarnings("ignore", category=FutureWarning) 
 warnings.filterwarnings("ignore", category=DeprecationWarning) 
 
-data_folder = 'data/'
-output_folder = 'results_gp/'
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
-parser = argparse.ArgumentParser(description='gp')
+data_folder = 'data/'
+config_folder = 'config/nggp/'
+output_folder = 'results_nggp/'
+
+parser = argparse.ArgumentParser(description='nggp')
 parser.add_argument(
     '--task',
     default='??',
@@ -26,64 +28,66 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-variables = [f"x{i}" for i in range(10)]
+def simplify_eq(eq):
+    return str(expand(simplify(eq)))
 
 
 def main(args):
     task = args.task
     num_test = 10
-    population = 2000
-    generation = 20
     norm_threshold = 1e-4
     save_eqs = True
-    range_const = (-10, 10)
 
-    all_times = []
     all_eqs = []
     num_success = 0
-    
-    ## define training variables 
-    
+
+    ## define testing independent variables
     data_x = np.load(f"data/{task}_x.npy")
     data_y = np.load(f"data/{task}_y.npy")
     
     train_num = int(len(data_x) * 0.8)
     
-    x_train = data_x[:train_num, ...]
-    f_train = data_y[:train_num, ...]
+    # x_train = data_x[:train_num, ...]
+    # f_train = data_y[:train_num, ...]
     
     ## define testing variables 
     x_test = data_x[train_num:, ...]
     f_test = data_y[train_num:, ...]
+     
+    num_var = x_test.shape[1] - 1
     
+    eval_dict = {
+        "sin": np.sin,
+        "cos": np.cos,
+        "exp": np.exp,
+        "log": np.log,
+    }
+    for x_id in range(num_var):
+        eval_dict[f"x{x_id + 1}"] = x_test[:, x_id]
+
     for i_test in range(num_test):
         print("\rTest {}/{}.".format(i_test, num_test), end="")
         sys.stdout.flush()
         
-        start_time = time.time()
-        
         # with redirect_stdout(None):
-        est_gp = SymbolicRegressor(population_size=population, generations=generation, 
-                                    stopping_criteria=0.01,const_range=range_const,
-                                    max_samples=1, function_set=gp_cfg[task], 
-                                    feature_names=variables[:x_train.shape[1]])
+        model = DeepSymbolicOptimizer(config_folder + task + ".json")
+        result = model.train()
+        print('##' + result['expression'] + '##')
+        dsr_eq = simplify_eq(result['expression'])
 
-        est_gp.fit(x_train, f_train)
-        gp_eq = str(est_gp._program)
-        
-        end_time = time.time() - start_time
-        all_eqs.append((-1, gp_eq))
+        print("## returned from dsr:", dsr_eq)                
+        all_eqs.append((1e9, dsr_eq))
         
         
         try: 
-            f_pred = est_gp.predict(x_test)
+            f_pred = eval(dsr_eq, eval_dict)
+            
             mse = np.linalg.norm((f_pred - f_test) / f_test.max(), 2) / f_test.shape[0]
             print(mse)
-            print(gp_eq)
+            print(dsr_eq)
             
             if mse <= norm_threshold:
                 num_success += 1
-                all_times.append(end_time)
             all_eqs[-1] = (mse, all_eqs[-1][1])
         except NameError:
             continue 

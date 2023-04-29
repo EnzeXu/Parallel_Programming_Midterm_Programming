@@ -3,11 +3,44 @@ Test cases config
 """
 import numpy as np
 _default_mvsr_config = {
-    'data_train_num': 180,
-    'data_test_num': 20,
+    'data_train_num': 700,
+    'data_test_num': 100,
     'c_regression_num': 200,
 }
 TestSettings = {
+    'Jin-6': { 'target_func': lambda x:  1.35 * x[:, 0] * x[:, 1] + 5.5 * np.sin((x[:, 0] - 1) * (x[:, 1] - 1)),
+        'data_num': 8000,
+        'common': {
+            'x_num': 2,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-3, 3),
+                'x1': (-3, 3),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [2, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 10,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->sin(A)', 'A->cos(A)', 'A->exp(A)'
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        },
+    },
     'test1': { 'target_func': lambda x: x[:, 0] / (1 + x[:, 1]**2) + 2,
         'data_num': 8000,
         'common': {

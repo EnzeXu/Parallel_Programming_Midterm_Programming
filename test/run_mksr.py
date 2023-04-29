@@ -6,7 +6,7 @@ import time
 import numpy as np
 from numpy import *
 
-from config.jin import TestSettings
+from config.alltests import TestSettings
 
 import sys
 sys.path.append("../src")
@@ -60,6 +60,7 @@ def main(args):
         "sin": np.sin,
         "cos": np.cos,
         "exp": np.exp,
+        "log": np.log,
     }
     for x_id in range(x_num):
         eval_dict[f"x{x_id}"] = x_test[:, x_id]

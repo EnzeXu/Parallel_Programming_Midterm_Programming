@@ -1,0 +1,11 @@
+0.0006041316743003418, sub(sub(sub(sub(add(power2(power2(x0)), power3(add(x1, x1))), div(power2(x0), power2(power2(x0)))), div(power2(x0), -5.768)), div(-0.943, -5.768)), add(-3.517, 9.998))
+0.0009313222765922547, add(power3(add(x1, x1)), mul(power2(x0), power2(x0)))
+0.0006278543937578663, add(power2(power2(x0)), sub(add(sub(power3(add(x1, x1)), sub(5.263, power2(-0.290))), power2(x0)), 5.263))
+0.0009313222765922547, add(power3(add(x1, x1)), power2(power2(x0)))
+0.0004912208962489623, add(sub(add(power3(add(x1, x1)), div(5.112, add(sub(power3(power2(power2(power2(x0)))), power2(add(power2(x0), power3(power2(power2(x0)))))), div(5.112, -6.963)))), power2(2.501)), power2(power2(x0)))
+0.0005939141891340284, add(add(div(add(div(power2(x0), power3(power2(power2(x0)))), power2(div(power2(div(add(add(power2(power2(x0)), power2(power2(x0))), power2(power2(x0))), power3(-2.436))), power3(-2.436)))), power3(-2.436)), add(-2.436, power2(power2(x0)))), power3(add(x1, x1)))
+nan, sub(mul(mul(power2(mul(power2(power2(power3(power2(x0)))), mul(power2(power2(power3(power2(x0)))), power3(power3(div(div(-1.183, x0), sub(2.671, x1))))))), power3(power3(div(sub(sub(mul(5.866, x1), power2(x1)), mul(sub(-2.652, x1), mul(x1, x1))), sub(2.671, x1))))), power2(power3(sub(power3(power3(power2(x0))), div(add(x1, x0), power2(x0)))))), power3(sub(power3(mul(x1, x0)), power2(mul(mul(power2(power2(power3(power2(x0)))), power3(power3(power3(div(x1, x0))))), power2(power3(sub(power3(sub(power3(div(x1, x0)), power2(x0))), power3(power2(x0))))))))))
+2.813346010509129e-06, sub(add(add(power2(add(x0, x0)), power2(add(x0, x0))), add(sub(-3.707, 5.437), sub(power3(add(x1, x1)), -4.063))), 9.891)
+0.0007088686321558297, sub(power3(add(x1, x1)), sub(power3(1.886), add(power2(x0), power2(power2(x0)))))
+0.0004676420795881776, add(add(add(add(add(power3(add(x1, x1)), mul(mul(power2(x0), power2(0.954)), power2(0.954))), power2(x0)), power2(x0)), -8.388), power2(mul(mul(power2(x0), power2(0.954)), power2(0.954))))
+success rate : 10%
