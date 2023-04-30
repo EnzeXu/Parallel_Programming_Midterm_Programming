@@ -1,7 +1,7 @@
 {
    "task" : {
       "task_type" : "regression",
-      "dataset" : "data/Jin-1_train.csv",
+      "dataset" : "data/Jin-5_train.csv",
       "function_set": ["add", "sub", "mul", "div", "sin", "cos", "exp", "const"],
      "poly_optimizer_params" : {
         "degree": 3,

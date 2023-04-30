@@ -54,7 +54,7 @@ def main(args):
     x_test = data_x[train_num:, ...]
     f_test = data_y[train_num:, ...]
      
-    num_var = x_test.shape[1] - 1
+    num_var = x_test.shape[1]
     
     eval_dict = {
         "sin": np.sin,
@@ -71,9 +71,12 @@ def main(args):
         
         # with redirect_stdout(None):
         model = DeepSymbolicOptimizer(config_folder + task + ".json")
+        model.set_seeds()
         result = model.train()
         dsr_eq = simplify_eq(result['expression'])
 
+        print(dsr_eq)
+        exit(0)
         print("## returned from dsr:", dsr_eq)                
         all_eqs.append((1e9, dsr_eq))
         
