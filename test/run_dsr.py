@@ -75,8 +75,6 @@ def main(args):
         result = model.train()
         dsr_eq = simplify_eq(result['expression'])
 
-        print(dsr_eq)
-        exit(0)
         print("## returned from dsr:", dsr_eq)                
         all_eqs.append((1e9, dsr_eq))
         
