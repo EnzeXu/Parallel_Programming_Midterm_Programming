@@ -180,13 +180,14 @@ class MKSR:
                     train_sample = XC[:, :self.data_train_num]
                     test_sample = XC[:, self.data_train_num:]
                     result = self.svsr_method(
-                        task=f"(x{var_id}, c{cid})",
+                        task=f"{self.func_name}(x{var_id}, c{cid})",
                         train_sample=train_sample,
                         test_sample=test_sample,
                         **self.svsr_cfg)
                     result = f"({result})"
                     result = _replace_x_with_xi(result, f"x{var_id}")
                     equation = equation.replace(f'c{cid}', result)
+                    print("equation is ", equation)
                     # with open(save_name, "w") as f:
                     #     f.write(equation)
             equation = str(_process(sy.simplify(equation)))

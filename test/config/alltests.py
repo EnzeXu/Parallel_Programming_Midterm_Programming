@@ -205,6 +205,18 @@ TestSettings = {
                 'A'
             },
         },
+        'dsr_config': {
+            "task" : {
+                "task_type" : "regression",
+                "function_set": ["add", "sub", "mul", "div", "sin", "cos", "exp", "const"],
+                "poly_optimizer_params" : {
+                    "degree": 3,
+                    "coef_tol": 1e-6,
+                    "regressor": "dso_least_squares",
+                    "regressor_params": {}
+                },
+            },
+        },
     },
 
     'Nguyen-09': { 'target_func': lambda x:  np.sin(x[:, 0]) + np.sin(x[:, 1])**2,
