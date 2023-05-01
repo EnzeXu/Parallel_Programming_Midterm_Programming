@@ -46,13 +46,21 @@ def main(args):
     for x_id in range(x_num):
         eval_dict[f"x{x_id}"] = x_test[:, x_id]
     
+    # if __debug__:
+    #     x_train = np.random.normal(0, 2, (10, 2))
+    #     f_train = x_train[:, 0] + x_train[:, 1]
+    
     ret_eqs, _, _ = run_spl(
         task, 
-        transplant_step = 10000, 
+        transplant_step = 10000,
+        num_transplant = 10,
         num_run=num_test,
         train_sample=np.hstack([x_train, f_train.reshape(len(f_train), 1)]).T,
         test_sample=np.hstack([x_test, f_test.reshape(len(f_test), 1)]).T,
     )
+    print(ret_eqs)
+    # if __debug__:
+    #     exit(0)
     all_eqs = []
     num_success = 0
     for eq in ret_eqs:

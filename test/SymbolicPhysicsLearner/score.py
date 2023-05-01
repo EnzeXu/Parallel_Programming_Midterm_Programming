@@ -68,19 +68,11 @@ def score_with_est(eq, tree_size, data, t_limit = 1.0, eta=0.999):
 
     ## define independent variables and dependent variable
     num_var = data.shape[0] - 1
-    if num_var <= 3: ## most cases ([x], [x,y], or [x,y,z])
-        current_var = 'x'
-        for i in range(num_var):
-            globals()[current_var] = data[i, :]
-            current_var = chr(ord(current_var) + 1)
-        globals()['f_true'] = data[-1, :]
-    else:            ## currently only double pendulum case has more than 3 independent variables
-        globals()['x1'] = data[0, :]
-        globals()['x2'] = data[1, :]
-        globals()['w1'] = data[2, :]
-        globals()['w2'] = data[3, :]
-        globals()['wdot'] = data[4, :]
-        globals()['f_true'] = data[5, :]
+    current_var = 'x'
+    for i in range(num_var):
+        globals()[f'x{i}'] = data[i, :]
+        current_var = chr(ord(current_var) + 1)
+    globals()['f_true'] = data[-1, :]
 
 
     ## count number of numerical values in eq
@@ -103,8 +95,7 @@ def score_with_est(eq, tree_size, data, t_limit = 1.0, eta=0.999):
                     for i in range(len(c)): globals()['c'+str(i)] = c[i]
                     return np.linalg.norm(eval(eq) - f_true, 2)
 
-                x0 = [1.0] * len(c_lst)
-                c_lst = minimize(eq_test, x0, method='Powell', tol=1e-6).x.tolist() 
+                c_lst = minimize(eq_test, [1.0] * len(c_lst), method='Powell', tol=1e-6).x.tolist() 
                 c_lst = [np.round(x, 4) if abs(x) > 1e-2 else 0 for x in c_lst]
                 eq_est = eq
                 for i in range(len(c_lst)):

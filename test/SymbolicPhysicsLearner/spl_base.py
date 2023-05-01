@@ -304,6 +304,7 @@ class SplBase:
                         self.update_modules(next_state, reward, eq)
                         self.update_QN_scale(reward)
                         best_solution = (eq, reward)
+                        print(best_solution)
                     
                     self.backpropogate(state, action, reward)
                     reward_his.append(best_solution[1])
@@ -321,6 +322,7 @@ class SplBase:
                 if reward > best_solution[1]:
                     self.update_QN_scale(reward)
                     best_solution = (eq, reward)
+                    print(best_solution)
 
                 self.backpropogate(state, action, reward)
                 reward_his.append(best_solution[1])
