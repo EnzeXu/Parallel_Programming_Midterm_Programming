@@ -351,6 +351,318 @@ TestSettings = {
             },
         }
     },
+
+    'Korns-2': { 'target_func': lambda x:  0.23 + 14.2 * (x[:, 1] + x[:, 2]) / (3 * x[:, 0]),
+        'data_num': 10000,
+        'common': {
+            'x_num': 3,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-50, 50),
+                'x1': (-50, 50),
+                'x2': (-50, 50),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 4000,
+            'layer': 'Taylor',
+            'activation': 'Tanh',
+            'layer_size': [3, 128, 256, 128, 1],
+            'lr': 0.003,
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 3,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        }
+    },
+    'Korns-3': { 'target_func': lambda x:  -5.41 + 4.9 * (x[:, 0] - x[:, 1] + x[:, 2] / x[:, 3]) / (3 * x[:, 3]),
+        'data_num': 10000,
+        'common': {
+            'x_num': 4,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-50, 50),
+                'x1': (-50, 50),
+                'x2': (-50, 50),
+                'x3': (-50, 50),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [4, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 3,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        }
+    },    
+    'Korns-8': { 'target_func': lambda x:  6.87 + 11 * (7.23 * x[:, 0] * x[:, 1] * x[:, 2]) ** 0.5,
+        'data_num': 10000,
+        'common': {
+            'x_num': 3,
+            'y_num': 1,
+            'x_range': {
+                'x0': (0, 50),
+                'x1': (0, 50),
+                'x2': (0, 50),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [3, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 3,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->(A**0.5)'
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        }
+    },
+    'Korns-9': { 'target_func': lambda x:  x[:, 0]**0.5 * np.exp(x[:, 1]) / (np.log(x[:, 2]) * x[:, 3]**2),
+        'data_num': 10000,
+        'common': {
+            'x_num': 4,
+            'y_num': 1,
+            'x_range': {
+                'x0': (0, 50),
+                'x1': (-50, 50),
+                'x2': (1, 50),
+                'x3': (-50, 50),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [4, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 3,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->(A**0.5)', 'A->exp(A)', 'A->log(A)',
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        }
+    },
+    'Korns-10': { 'target_func': lambda x: 0.81 + 24.3 * (2 * x[:, 0] + 3 * x[:, 1]**2) / (4 * x[:, 2]**3 + 5 * x[:, 3]**4),
+        'data_num': 10000,
+        'common': {
+            'x_num': 4,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-50, 50),
+                'x1': (-50, 50),
+                'x2': (-50, 50),
+                'x3': (-50, 50),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [4, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 3,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->(A**2)', 'A->(A**3)', 'A->(A**4)',
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        }
+    },
+    'Korns-12': { 'target_func': lambda x: 2 - 2.1 * np.cos(9.8 * x[:, 0]) * np.sin(1.3 * x[:, 1]),
+        'data_num': 10000,
+        'common': {
+            'x_num': 2,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-50, 50),
+                'x1': (-50, 50),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [2, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 3,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->cos(A)', 'A->sin(A)',
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        }
+    },
+    'Korns-13': { 'target_func': lambda x: 32 - 3 * np.tan(x[:, 0]) * np.tan(x[:, 1]) / (np.tan(x[:, 2]) * np.tan(x[:, 3])),
+        'data_num': 10000,
+        'common': {
+            'x_num': 4,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-50, 50),
+                'x1': (-50, 50),
+                'x2': (-50, 50),
+                'x3': (-50, 50),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [4, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 3,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->tan(A)',
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        }
+    },
+    'Korns-14': { 'target_func': lambda x: 22 - 4.2 * (np.cos(x[:, 0]) - np.tan(x[:, 1])) * np.tanh(x[:, 2]) / np.sin(x[:, 3]),
+        'data_num': 10000,
+        'common': {
+            'x_num': 4,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-50, 50),
+                'x1': (-50, 50),
+                'x2': (-50, 50),
+                'x3': (-50, 50),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [4, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 3,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->cos(A)', 'A->sin(A)', 'A->tan(A)', 'A->tanh(A)'
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        }
+    },
+    'Korns-15': { 'target_func': lambda x: 12 - 6 * np.tan(x[:, 0]) / np.exp(x[:, 1]) * (np.log(x[:, 2]) - np.tan(x[:, 3])),
+        'data_num': 10000,
+        'common': {
+            'x_num': 4,
+            'y_num': 1,
+            'x_range': {
+                'x0': (-50, 50),
+                'x1': (-50, 50),
+                'x2': (1, 50),
+                'x3': (-50, 50),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [4, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 3,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->tan(A)', 'A->exp(A)', 'A->log(A)'
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        }
+    },
+
 }
 
 from gplearn.functions import make_function

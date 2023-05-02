@@ -27,11 +27,20 @@ class Trainer:
     ) -> None:
         self.func_name = func_name
         self.train_times = int(len(data_x) * 0.8)
+        # normalize
+        self.data_x_mean = data_x.mean(axis=0)
+        self.data_x_std = data_x.std(axis=0)
+        data_x = (data_x - self.data_x_mean) / self.data_x_std
+        self.data_y_mean = data_y.mean(axis=0)
+        self.data_y_std = data_y.std(axis=0)
+        data_y = (data_y - self.data_y_mean) / self.data_y_std
+        # split data
         self.val_times = len(data_x) - self.train_times
         self.train_x = torch.from_numpy(data_x[:self.train_times, ...])
-        self.val_x = torch.from_numpy(data_x[self.train_times:, ...])        
+        self.val_x = torch.from_numpy(data_x[self.train_times:, ...])
         self.train_y = torch.from_numpy(data_y[:self.train_times, ...])
         self.val_y = torch.from_numpy(data_y[self.train_times:, ...])
+        # 
         self.x_range = x_range
         self.x_num = x_num
         self.y_num = y_num
@@ -102,11 +111,13 @@ class Trainer:
     def get_eval(self, y_id):
         self.mlnn.eval()
         def eval(x: np.ndarray):
-            torch_x = torch.tensor(x.T, dtype=torch.float32)
+            x = x.T
+            x = (x - self.data_x_mean) / self.data_x_std
+            torch_x = torch.tensor(x, dtype=torch.float32)
             nn_result = self.mlnn(torch_x).detach().numpy()[:, y_id]
-            # for x0, x1, y in zip(torch_x[:, 0], torch_x[:, 1], nn_result):
-            #     print(x0, x1, y)
-            return np.array(nn_result.flat)
+            y = np.array(nn_result.flat)
+            y = y * self.data_y_std + self.data_y_mean
+            return y
         return eval
     
     def _load(self):

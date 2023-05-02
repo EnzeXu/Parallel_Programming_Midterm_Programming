@@ -12,21 +12,17 @@ jin:
 	python3 $(target) --task=Jin-5 > log_jin_$(target)_5 &
 	python3 $(target) --task=Jin-6 > log_jin_$(target)_6 &
 
-nggp-jin:
-	python3 run_nggp.py --task=Jin-1 > log_nggp_1 &
-	python3 run_nggp.py --task=Jin-2 > log_nggp_2 &
-	python3 run_nggp.py --task=Jin-3 > log_nggp_3 &
-	python3 run_nggp.py --task=Jin-4 > log_nggp_4 &
-	python3 run_nggp.py --task=Jin-5 > log_nggp_5 &
-	python3 run_nggp.py --task=Jin-6 > log_nggp_6 &
-
-dsr-jin:
-	python3 run_dsr.py --task=Jin-1 > log_dsr_1 &
-	python3 run_dsr.py --task=Jin-2 > log_dsr_2 &
-	python3 run_dsr.py --task=Jin-3 > log_dsr_3 &
-	python3 run_dsr.py --task=Jin-4 > log_dsr_4 &
-	python3 run_dsr.py --task=Jin-5 > log_dsr_5 &
-	python3 run_dsr.py --task=Jin-6 > log_dsr_6 &
+korns:
+	python3 $(target) --task=Korns-2  > log_Korns_$(target)_2  &
+	python3 $(target) --task=Korns-3  > log_Korns_$(target)_3  &
+	python3 $(target) --task=Korns-8  > log_Korns_$(target)_8  &
+	python3 $(target) --task=Korns-9  > log_Korns_$(target)_9  &
+	python3 $(target) --task=Korns-10 > log_Korns_$(target)_10 &
+	python3 $(target) --task=Korns-11 > log_Korns_$(target)_11 &
+	python3 $(target) --task=Korns-12 > log_Korns_$(target)_12 &
+	python3 $(target) --task=Korns-13 > log_Korns_$(target)_13 &
+	python3 $(target) --task=Korns-14 > log_Korns_$(target)_14 &
+	python3 $(target) --task=Korns-15 > log_Korns_$(target)_15 &
 
 show:
 	ps aux | grep $(name) | grep -v grep
