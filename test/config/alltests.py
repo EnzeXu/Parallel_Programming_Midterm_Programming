@@ -193,9 +193,9 @@ TestSettings = {
         'svsr_config': {
             'num_run': 1,
             'transplant_step': 10000,
-            'num_transplant': 10,
+            'num_transplant': 4,
             'exp_rate': 1/np.sqrt(2),
-            'eta': 0.99,
+            'eta': 0.999,
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
@@ -238,10 +238,10 @@ TestSettings = {
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
             'num_run': 1,
-            'transplant_step': 7000,
-            'num_transplant': 2,
+            'transplant_step': 10000,
+            'num_transplant': 4,
             'exp_rate': 1/np.sqrt(2),
-            'eta': 0.99,
+            'eta': 0.999,
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
@@ -271,10 +271,10 @@ TestSettings = {
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
             'num_run': 1,
-            'transplant_step': 7000,
-            'num_transplant': 2,
+            'transplant_step': 10000,
+            'num_transplant': 4,
             'exp_rate': 1/np.sqrt(2),
-            'eta': 0.99,
+            'eta': 0.999,
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
@@ -285,7 +285,7 @@ TestSettings = {
             },
         }
     },
-    'Nguyen-11': { 'target_func': lambda x:  np.exp(x[:, 1] * np.log(x[:, 0])),
+    'Nguyen-11': { 'target_func': lambda x:  np.exp(x[:, 0] * np.log(x[:, 1])),
         'data_num': 8000,
         'common': {
             'x_num': 2,
@@ -304,10 +304,10 @@ TestSettings = {
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
             'num_run': 1,
-            'transplant_step': 7000,
-            'num_transplant': 2,
+            'transplant_step': 10000,
+            'num_transplant': 4,
             'exp_rate': 1/np.sqrt(2),
-            'eta': 0.99,
+            'eta': 0.999,
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
@@ -337,10 +337,10 @@ TestSettings = {
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
             'num_run': 1,
-            'transplant_step': 7000,
-            'num_transplant': 2,
+            'transplant_step': 10000,
+            'num_transplant': 4,
             'exp_rate': 1/np.sqrt(2),
-            'eta': 0.99,
+            'eta': 0.999,
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
@@ -358,15 +358,15 @@ TestSettings = {
             'x_num': 3,
             'y_num': 1,
             'x_range': {
-                'x0': (-50, 50),
-                'x1': (-50, 50),
-                'x2': (-50, 50),
+                'x0': (-5, 5),
+                'x1': (-5, 5),
+                'x2': (-5, 5),
             },
         },
         'srnn_config':  {
             'epochs': 4000,
-            'layer': 'Taylor',
-            'activation': 'Tanh',
+            'layer': 'Linear',
+            'activation': 'ReLU',
             'layer_size': [3, 128, 256, 128, 1],
             'lr': 0.003,
         },
