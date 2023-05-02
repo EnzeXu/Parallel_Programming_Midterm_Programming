@@ -31,9 +31,6 @@ def _replace_number_with_capital_c(text: str) -> str:
     text = re.sub(r'\*\*3(?![0-9\.])', "**THREE", text)    # protect ^3
     text = re.sub(r'\*\*4(?![0-9\.])', "**FOUR", text)     # protect ^4
     text = re.sub(r'\*\*0\.5(?![0-9\.])', "**SQRT", text)  # protect sqrt
-    text = text.replace("**3", "**THREE")  
-    text = text.replace("**4", "**FOUR")  # protect ^2
-    text = text.replace("**0.5", "**SQRT")  # protect sqrt
     pattern_scitific_repre = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)[eE][+-]?[0-9]+"
     text = re.sub(pattern_scitific_repre, "C", text)
     pattern_const = r"(?<!x)([0-9]*\.[0-9]*|[0-9]+)([eE][+-]?[0-9]+)?"
