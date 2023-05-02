@@ -1,0 +1,11 @@
+0.0, add(mul(sin(x1), sin(x1)), sin(x0))
+0.00014548776216191463, sub(cos(add(cos(x1), mul(sin(cos(cos(mul(mul(cos(cos(cos(x1))), sin(cos(x1))), cos(x1))))), sin(cos(x1))))), sin(sub(sin(mul(sub(x1, x1), 5.764)), x0)))
+0.0, add(mul(sin(x1), sin(x1)), sin(x0))
+0.0036037227511405943, add(sin(cos(cos(x1))), sin(x0))
+0.0036037227511405943, add(sin(cos(cos(x1))), sin(x0))
+0.0009152019768953323, add(sin(x0), mul(cos(cos(x1)), mul(cos(cos(x1)), cos(cos(x1)))))
+0.00027261103696094453, add(sub(cos(cos(x1)), sub(cos(sub(sub(cos(cos(x1)), div(sub(-0.977, -1.066), sub(cos(cos(x1)), div(sub(-0.977, -1.066), cos(cos(x1)))))), -5.960)), sin(cos(cos(x1))))), sin(x0))
+0.004347636795458389, sub(sin(x0), sin(sin(-8.825)))
+0.00010405103676021099, add(cos(div(cos(x1), sin(cos(cos(cos(cos(cos(cos(x1))))))))), sin(x0))
+0.0013888347003954485, add(cos(cos(x1)), sub(sin(x0), div(div(cos(cos(cos(x1))), 2.858), cos(cos(x1)))))
+success rate : 20%

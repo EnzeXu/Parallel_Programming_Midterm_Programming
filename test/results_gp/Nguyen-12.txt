@@ -1,0 +1,11 @@
+0.00033921174705028536, sub(sub(power2(power2(x1)), x0), sub(power3(x1), div(x1, x1)))
+0.0005468327476975274, mul(sub(add(div(x0, -5.334), power2(x1)), x1), power2(x1))
+0.00033921174705028536, sub(sub(add(div(x1, x1), power2(power2(x1))), x0), power3(x1))
+0.00010575584763975908, sub(power2(power2(x1)), sub(sub(sub(add(power2(power2(div(add(sub(x1, 7.380), sub(x0, x1)), 8.732))), power3(x1)), power2(div(x0, 8.732))), power2(power2(div(add(add(sub(x1, 7.380), sub(x0, x1)), sub(x0, power3(-0.607))), 8.732)))), power2(power2(div(add(add(sub(x1, 7.380), sub(x0, x1)), sub(x0, power3(-0.607))), 8.732)))))
+0.0003221710392673257, sub(sub(power2(power2(x1)), add(-1.266, power3(x1))), x0)
+0.00032762842560125416, sub(add(sub(div(8.536, 7.352), power3(x1)), power2(power2(x1))), x0)
+5.514958800745262e-10, sub(sub(mul(add(x1, sub(x1, x1)), div(power2(x0), add(x1, x1))), sub(x0, power2(power2(x1)))), power3(x1))
+0.00013405012882596393, sub(power2(power2(x1)), add(add(power3(x1), div(power2(x0), -1.559)), x0))
+0.00013740960092383948, add(div(x0, -6.940), add(div(x0, -6.940), add(div(x0, -6.940), add(div(x0, -6.940), add(div(x0, -6.940), add(div(x0, -6.940), sub(power2(power2(x1)), add(add(add(power3(x1), mul(power3(-0.532), power2(x0))), mul(power3(-0.532), power2(x0))), -0.532))))))))
+0.00032981362110261474, add(sub(1.126, x0), mul(power2(x1), sub(power2(x1), x1)))
+success rate : 10%

@@ -199,7 +199,7 @@ TestSettings = {
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
-                'A->sin(A)', 'A->cos(A)', 'A->exp(A)'
+                'A->sin(A)',
             ],
             'nt_nodes': {
                 'A'
@@ -344,7 +344,7 @@ TestSettings = {
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
-                'A->sin(A)', 'A->cos(A)'
+                'A->A**2', 'A->A**3',
             ],
             'nt_nodes': {
                 'A'
@@ -368,7 +368,8 @@ TestSettings = {
             'layer': 'Linear',
             'activation': 'ReLU',
             'layer_size': [3, 128, 256, 128, 1],
-            'lr': 0.003,
+            'lr': 1e-4,
+            'dropout': 0.2,
         },
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
@@ -671,6 +672,11 @@ def _protected_exponent(x):
     with np.errstate(over='ignore'):
         return np.where(np.abs(x) < 100, np.exp(x), 0.)
 
+def _protected_log(x1):
+    """Closure of log for zero and negative arguments."""
+    with np.errstate(divide='ignore', invalid='ignore'):
+        return np.where(np.abs(x1) > 0.001, np.log(np.abs(x1)), 0.)
+
 def _power2(x):
     return x**2
 def _power3(x):
@@ -679,6 +685,7 @@ def _power3(x):
 power2 = make_function(function=_power2, name='power2', arity=1)
 power3 = make_function(function=_power3, name='power3', arity=1)
 exponential = make_function(function=_protected_exponent, name='exp', arity=1)
+logarithm = make_function(function=_protected_log, name='log', arity=1)
 
 gp_cfg = {
     'Jin-1': ("add", "sub", "mul", "div", power2, power3), 
@@ -687,4 +694,8 @@ gp_cfg = {
     'Jin-4': ("add", "sub", "mul", "div", 'sin', 'cos', exponential), 
     'Jin-5': ("add", "sub", "mul", "div", 'sin', 'cos', exponential), 
     'Jin-6': ("add", "sub", "mul", "div", 'sin', 'cos', exponential), 
+    'Nguyen-09': ("add", "sub", "mul", "div", 'sin', 'cos'), 
+    'Nguyen-10': ("add", "sub", "mul", "div", 'sin', 'cos'), 
+    'Nguyen-11': ("add", "sub", "mul", "div", logarithm, exponential), 
+    'Nguyen-12': ("add", "sub", "mul", "div", power2, power3), 
 }
