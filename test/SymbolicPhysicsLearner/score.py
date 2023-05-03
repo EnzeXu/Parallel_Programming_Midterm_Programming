@@ -82,7 +82,7 @@ def score_with_est(eq, tree_size, data, t_limit = 1.0, eta=0.999):
         try: 
             if c_count == 0:       ## no numerical values
                 f_pred = eval(eq)
-            elif c_count >= 10:    ## discourage over complicated numerical estimations
+            elif c_count >= 4:    ## discourage over complicated numerical estimations
                 return 0, eq
             else:                  ## with numerical values: coefficient estimationwith Powell method
 

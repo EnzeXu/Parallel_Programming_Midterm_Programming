@@ -53,7 +53,7 @@ def main(args):
     ret_eqs, _, _ = run_spl(
         task, 
         transplant_step = 10000,
-        num_transplant = 10,
+        num_transplant = 20,
         num_run=num_test,
         train_sample=np.hstack([x_train, f_train.reshape(len(f_train), 1)]).T,
         test_sample=np.hstack([x_test, f_test.reshape(len(f_test), 1)]).T,
