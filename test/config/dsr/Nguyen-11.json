@@ -1,0 +1,15 @@
+{
+   "task" : {
+      "task_type" : "regression",
+      "dataset" : "data/Nguyen-11_train.csv",
+      "function_set": ["add", "sub", "mul", "div", "log", "exp", "const"],
+      "poly_optimizer_params" : {
+        "degree": 3,
+        "coef_tol": 1e-6,
+        "regressor": "dso_least_squares",
+        "regressor_params": {}
+      }
+   }
+}
+
+
