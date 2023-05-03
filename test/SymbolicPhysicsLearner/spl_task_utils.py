@@ -63,10 +63,9 @@ rule_map = {
                  'A->x', 'A->cos(A)', 'A->sin(A)', 'A->exp(A)', 
                  'A->log(A)', 'A->sqrt(A)'],
 
-    'Nguyen-09': ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A', 'A->exp(A)', 
-                 'A->1', 'A->x0', 'A->x1', 'A->cos(B)', 'A->sin(B)', 'B->B+B', 'B->B-B', 
-                 'B->1', 'B->x0', 'B->x1', 'B->x0**2', 'B->x1**2', 'B->x0*x1', 
-                 'B->x0**2*x1', 'B->x0*x1**2', 'B->x0**3', 'B->x1**3'],
+    'Nguyen-09': ['A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                  'A->(A/A)', 'A->x0', 'A->x1', 'A->C',
+                  'A->sin(A)', 'A->cos(A)'],
 
     'Nguyen-10': ['A->A+A', 'A->A-A', 'A->A*A', 'A->A/A', 'A->exp(A)', 
                  'A->1', 'A->x0', 'A->x1', 'A->cos(B)', 'A->sin(B)', 'B->B+B', 'B->B-B', 
