@@ -82,12 +82,15 @@ class Trainer:
         
         best_epoch, min_loss = 0, float('Inf')
             
+        train_loss_list = []
+        valid_loss_list = []
         for epoch in range(self.epochs):
             self.mlnn.train()
             opt.zero_grad()
             train_x_clone = train_x.clone().to(device)
             y_hat = self.mlnn(train_x_clone)
             train_loss = loss_fn(y_hat, train_y)
+            train_loss_list.append(train_loss.item())
             train_loss.backward()
             opt.step()
             
@@ -96,6 +99,8 @@ class Trainer:
                 val_x_clone = val_x.clone().to(device)
                 y_hat = self.mlnn(val_x_clone)
                 val_loss = loss_fn(y_hat, val_y)
+                valid_loss_list.append(val_loss.item())
+                
                 
             if val_loss.item() < min_loss:
                 best_epoch = epoch
@@ -107,6 +112,11 @@ class Trainer:
             print(info_epoch + info_best)
         self.mlnn.to('cpu')
         self.mlnn.eval()
+        plt.subplot(1, 2, 1)
+        plt.plot(train_loss_list)
+        plt.subplot(1, 2, 2)
+        plt.plot(valid_loss_list)
+        # plt.savefig("loss_srnn.png")
     
     def get_eval(self, y_id):
         self.mlnn.eval()
