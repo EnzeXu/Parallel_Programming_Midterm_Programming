@@ -1,0 +1,11 @@
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+1000000000.0, x0**2*x1/sqrt(x0**2*x1) - x0*sqrt(x0*x1**2)*cos(x0) - 2*x0 - 2*x1 - 2*cos(x1**3) + sin(x0**2)/sqrt(x0**2*x1) + exp(sqrt(x0**2*x1))/x0**2 + exp(sqrt(x0**2*x1))/x0**3
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+1000000000.0, -x0*sqrt(x0**2*x1) - x0*sqrt(x0**3)*exp(cos(x0))*sin(x0 - x1) - x1**3*sin(x0) + x1**2 + x1 - sqrt(x0**2*x1) - sqrt(x1**3) + exp(x1) + exp(sqrt(x0**2*x1))/(x0*x1)
+success rate : 80%

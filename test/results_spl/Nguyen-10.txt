@@ -1,0 +1,11 @@
+0.0, 2*sin(x0)*cos(x1)
+0.000254103597253561, exp(cos(1))*sin(x0)*cos(x1)/sin(1)
+0.0, 2*sin(x0)*cos(x1)
+0.0, 2*sin(x0)*cos(x1)
+0.0, 2*sin(x0)*cos(x1)
+0.0, 2*sin(x0)*cos(x1)
+0.0027835536003112792, 2*x0*exp(cos(x0))*cos(1)*cos(x1)
+1000000000.0, x0**2*exp(cos(x0))*sin(x0)*cos(x1)/tan(1) + exp(cos(x0))*sin(x0)*cos(1)*cos(x1)/tan(1)
+0.0, 2*sin(x0)*cos(x1)
+0.0, 2*sin(x0)*cos(x1)
+success rate : 70%
