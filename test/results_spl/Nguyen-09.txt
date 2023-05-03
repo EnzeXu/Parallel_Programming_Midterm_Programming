@@ -1,0 +1,11 @@
+1000000000.0, -2*exp(-E)*exp(cos(1))*exp(cos(x1**3))*cos(x1**2)**3/cos(1) + exp(-E)*exp(cos(1))*exp(cos(x1**3))*cos(x1**2)/cos(1) + sin(x0) - cos(1) + 1/sin(1)
+0.0012101845443248749, x1*exp(cos(x1))*sin(x1)*cos(1)/sin(2) + sin(x0)
+0.0012101845443248749, x1*exp(cos(x1))*sin(x1)*cos(1)/sin(2) + sin(x0)
+0.001281951367855072, x1*exp(cos(x1))*sin(x1)*cos(1) + sin(x0)
+0.0030234062671661375, sin(x0) + cos(1) - exp(-sin(1))*exp(sin(x1**3 - x1**2))*sin(x1)*cos(x1**2)/x1
+0.0011892065405845643, x1*exp(-cos(1))*exp(cos(x1))*sin(x1) + sin(x0)
+0.001281951367855072, x1*exp(cos(x1))*sin(x1)*cos(1) + sin(x0)
+0.001281951367855072, x1*exp(cos(x1))*sin(x1)*cos(1) + sin(x0)
+0.0012101845443248749, x1*exp(cos(x1))*sin(x1)*cos(1)/sin(2) + sin(x0)
+0.001281951367855072, x1*exp(cos(x1))*sin(x1)*cos(1) + sin(x0)
+success rate : 0%
