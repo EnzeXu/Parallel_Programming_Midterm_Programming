@@ -311,7 +311,7 @@ TestSettings = {
             'grammars': [
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
-                'A->log(A)', 'A->exp(A)'
+                'A->log(x)', 'A->exp(A)'
             ],
             'nt_nodes': {
                 'A'
