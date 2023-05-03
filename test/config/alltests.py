@@ -179,8 +179,8 @@ TestSettings = {
             'x_num': 2,
             'y_num': 1,
             'x_range': {
-                'x0': (-3, 3),
-                'x1': (-3, 3),
+                'x0': (0, 2),
+                'x1': (0, 2),
             },
         },
         'srnn_config':  {
