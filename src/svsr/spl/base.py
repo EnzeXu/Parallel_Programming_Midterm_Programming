@@ -310,7 +310,6 @@ class SplBase:
                     self.backpropogate(state, action, reward)
                     reward_his.append(best_solution[1])
                     break
-                    
             # scenario 2: if current parent node not fully expanded, follow policy2
             if UC:
                 action = np.random.choice(np.arange(nA), p=policy2(UC))
@@ -319,7 +318,6 @@ class SplBase:
                     reward, eq = self.rollout(num_play, next_state, ntn_next)
                     if state not in states:
                         states.append(state)
-
                 if reward > best_solution[1]:
                     self.update_QN_scale(reward)
                     # print()
