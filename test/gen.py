@@ -15,6 +15,12 @@ for funcname, cfg in TestSettings.items():
     data_x = np.ndarray((data_num, x_num), dtype=np.float32)
     for vid in range(x_num):
         data_x[:, vid] = np_rng.uniform(*x_range[f"x{vid}"], data_num)
+    if funcname == 'Korns-2':
+        for vid in range(x_num):
+            for i in range(len(data_x)):
+                while np.abs(data_x[i, vid]) < 1:
+                    data_x[i, vid] = np_rng.uniform(*x_range[f"x{vid}"])
+                    
     data_y = target_func(data_x)
     print("data_num:", data_num)
     print(data_x[:10, ...])
