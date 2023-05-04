@@ -2,27 +2,26 @@ import numpy as np
 from numpy import *
 from sympy import simplify, expand
 from scipy.optimize import minimize
-from contextlib import contextmanager
 import threading
 import _thread
 import time
 
 
-class TimeoutException(Exception):
-    def __init__(self, msg=''):
-        self.msg = msg
+import signal
+from contextlib import contextmanager
+
+class TimeoutException(Exception): pass
 
 @contextmanager
-def time_limit(seconds, msg=''):
-    timer = threading.Timer(seconds, lambda: _thread.interrupt_main())
-    timer.start()
+def time_limit(seconds):
+    def signal_handler(signum, frame):
+        raise TimeoutException("Timed out!")
+    signal.signal(signal.SIGALRM, signal_handler)
+    signal.alarm(seconds)
     try:
         yield
-    except KeyboardInterrupt:
-        raise TimeoutException("Timed out for operation {}".format(msg))
     finally:
-        # if the action ends in specified time, timer is canceled
-        timer.cancel()
+        signal.alarm(0)
 
 
 def simplify_eq(eq):
@@ -86,8 +85,8 @@ def score_with_est(eq, tree_size, data, t_limit = 1.0, eta=0.999):
     ## count number of numerical values in eq
     c_count = eq.count('C')
     # start_time = time.time()
-    with time_limit(t_limit, 'sleep'):
-        try: 
+    try: 
+        with time_limit(t_limit):
             if c_count == 0:       ## no numerical values
                 f_pred = eval(eq)
             elif c_count >= 4:    ## discourage over complicated numerical estimations
@@ -110,9 +109,8 @@ def score_with_est(eq, tree_size, data, t_limit = 1.0, eta=0.999):
                     eq_est = eq_est.replace('c'+str(i), str(c_lst[i]), 1)
                 eq = eq_est.replace('+-', '-')
                 f_pred = eval(eq)
-        except: 
-            return 0, eq
-
+    except: 
+        return 0, eq
     r = float(eta ** tree_size / (1.0 + np.linalg.norm(f_pred - f_true, 2) ** 2 / f_true.shape[0]))
 
     # run_time = np.round(time.time() - start_time, 3)
