@@ -1,11 +1,11 @@
-1000000000.0, crashed
-1000000000.0, crashed
-1000000000.0, crashed
-1000000000.0, crashed
-1000000000.0, crashed
-1000000000.0, crashed
-1000000000.0, crashed
-1000000000.0, crashed
-1000000000.0, crashed
-1000000000.0, crashed
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
+0.0, exp(x0*log(x1))
 success rate : 0%
