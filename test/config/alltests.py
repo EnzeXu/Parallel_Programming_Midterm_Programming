@@ -337,8 +337,8 @@ TestSettings = {
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
             'num_run': 1,
-            'transplant_step': 10000,
-            'num_transplant': 4,
+            'transplant_step': 2000,
+            'num_transplant': 2,
             'exp_rate': 1/np.sqrt(2),
             'eta': 0.999,
             'grammars': [
