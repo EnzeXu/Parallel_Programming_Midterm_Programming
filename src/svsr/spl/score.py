@@ -17,7 +17,7 @@ def time_limit(seconds):
     def signal_handler(signum, frame):
         raise TimeoutException("Timed out!")
     signal.signal(signal.SIGALRM, signal_handler)
-    signal.alarm(seconds)
+    signal.alarm(int(seconds))
     try:
         yield
     finally:
@@ -109,7 +109,9 @@ def score_with_est(eq, tree_size, data, t_limit = 1.0, eta=0.999):
                     eq_est = eq_est.replace('c'+str(i), str(c_lst[i]), 1)
                 eq = eq_est.replace('+-', '-')
                 f_pred = eval(eq)
+        # print("Not TLE")
     except: 
+        # print(f"TLE for {t_limit}s")
         return 0, eq
     r = float(eta ** tree_size / (1.0 + np.linalg.norm(f_pred - f_true, 2) ** 2 / f_true.shape[0]))
 
