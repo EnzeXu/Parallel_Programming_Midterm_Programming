@@ -393,10 +393,10 @@ TestSettings = {
             'x_num': 4,
             'y_num': 1,
             'x_range': {
-                'x0': (-50, 50),
-                'x1': (-50, 50),
-                'x2': (-50, 50),
-                'x3': (-50, 50),
+                'x0': (-10, 10),
+                'x1': (-10, 10),
+                'x2': (-10, 10),
+                'x3': (-10, 10),
             },
         },
         'srnn_config':  {
@@ -657,6 +657,46 @@ TestSettings = {
                 'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
                 'A->(A/A)', 'A->x', 'A->C',
                 'A->tan(A)', 'A->exp(A)', 'A->log(A)'
+            ],
+            'nt_nodes': {
+                'A'
+            },
+        }
+    },
+    'LawOfGravity': { 'target_func': lambda x: x[:, 0] * x[:, 1] * x[:, 2] / ((x[:, 3] - x[:, 4])**2 + (x[:, 5] - x[:, 6])**2 + (x[:, 7] - x[:, 8])**2),
+        'data_num': 10000,
+        'common': {
+            'x_num': 9,
+            'y_num': 1,
+            'x_range': {
+                'x0': (1, 10),
+                'x1': (1, 10),
+                'x2': (1, 10),
+                'x3': (-5, 5),
+                'x4': (-5, 5),
+                'x5': (-5, 5),
+                'x6': (-5, 5),
+                'x7': (-5, 5),
+                'x8': (-5, 5),
+            },
+        },
+        'srnn_config':  {
+            'epochs': 2000,
+            'layer': 'Linear',
+            'activation': 'ReLU',
+            'layer_size': [9, 128, 256, 128, 1],
+        },
+        'mvsr_config': _default_mvsr_config,
+        'svsr_config': {
+            'num_run': 1,
+            'transplant_step': 10000,
+            'num_transplant': 3,
+            'exp_rate': 1/np.sqrt(2),
+            'eta': 0.99,
+            'grammars': [
+                'A->(A+A)', 'A->(A-A)', 'A->(A*A)',
+                'A->(A/A)', 'A->x', 'A->C',
+                'A->A**2'
             ],
             'nt_nodes': {
                 'A'

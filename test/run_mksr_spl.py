@@ -75,7 +75,14 @@ def main(args):
         print("\rTest {}/{}.".format(i_test, num_test))
         try:
             eqs = {}
-            neuro_eval = trainer.get_eval(0) # since only one y
+            neuro_eval = trainer.get_eval(0) # since only one yd
+
+            # def neuro_eval(x):
+            #     def target_func(x):
+            #         return cfg['target_func'](x)
+            #     y = target_func(x.T)
+            #     return np.array(y.flat)
+
             svsr_method = run_spl        
             mksr_model = MKSR(
                 func_name=task,
