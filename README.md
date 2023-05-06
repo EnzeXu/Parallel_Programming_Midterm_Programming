@@ -5,6 +5,8 @@ Multivariable Killer of Symbolic Regression
 
 ### Install
 
+install some related packages like torch / numpy
+
 (to be update)
 
 ### Steps
