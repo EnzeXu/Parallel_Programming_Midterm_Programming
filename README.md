@@ -5,22 +5,11 @@ Multivariable Killer of Symbolic Regression
 
 ### Install
 
-```sh
-conda create --name sr python=3.10 -y
-conda activate sr
-conda install numpy pandas sympy scipy torch
-conda install pytorch torchvision torchaudio cpuonly -c pytorch
-```
+(to be update)
 
 ### Steps
 
-1. Get a set of $[x1, x2, x3, ... xn, y]$
-2. Use arbitrary NN to learn y = f(x1, x2, x3, ... xn) 
-   (like knowledge distillation)
-   or skip this steps if already have enough data.
-3. Generate the data using trained NN
-4. Learn $f_{x2, x3, ... xn}(x1), f_{x1, x3, ... xn}(x2), \dots$ using SVSR.
-5. Combine the result.
+(to be update)
 
 ### TODO
 
@@ -41,27 +30,8 @@ conda install pytorch torchvision torchaudio cpuonly -c pytorch
 - https://github.com/brendenpetersen/deep-symbolic-optimization
 - https://github.com/isds-neu/SymbolicPhysicsLearner
 
-### Current Testing Result
-command
-```sh
-conda activate sr
-cd run
-make run test=test2
-```
-2023/04/06
-
-ground truth equation: $\sin(x_0) (2.5 x_1^2 + \cos(x_1)) + x_1 + 3$
-
-discovered equation: x1 + (2.50004998*x1**2 + cos(x1))*sin(x0) + 3.0
-
----
-
-ground truth equation: $x_0 x_1 + x_0 + 2 x_1 + e^{x_1}$
-
-discovered equation: x0*(x1 + 1.0) + 2.0*x1 + exp(x1)
-
----
-
-ground truth equation: $x_0 x_1 + x_0 + 2 \frac{x1}{x2} + x_2 e^{x_1}$
-
-discovered equation: (2.0*x1 + x2*(x0*(x1 + 1.0) + x2*exp(x1)))/x2
+### Tips
+* Config file for test `test/config/alltests.py`
+* If update the data range or data num, run `cd test; python3 gen.py` first. data will locate at `test/data/*`
+* Running our method: `cd test; python3 run_mksr_spl.py --task=Korns-2`
+* NN related code: `src/srnn/mlnn/trainer.py`, `src/srnn/mlnn/model/*`
