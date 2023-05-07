@@ -1,0 +1,7 @@
+gplearn
+matplotlib
+numpy
+pandas
+tensorly
+torch
+
