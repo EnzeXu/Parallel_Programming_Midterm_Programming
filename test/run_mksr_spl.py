@@ -52,7 +52,8 @@ def main(args):
     y_test = data_y[train_num:, ...]
     
     
-    cfg = TestSettings[task]  
+    cfg = TestSettings[task]
+    print("setting loaded")
     y_num = cfg['common']['y_num']
     x_num = cfg['common']['x_num']
     
@@ -71,53 +72,53 @@ def main(args):
         **cfg['common'],
         **cfg['srnn_config'])
     trainer.run()
-    for i_test in range(num_test):
-        print("\rTest {}/{}.".format(i_test, num_test))
-        try:
-            eqs = {}
-            neuro_eval = trainer.get_eval(0) # since only one yd
-
-            # def neuro_eval(x):
-            #     def target_func(x):
-            #         return cfg['target_func'](x)
-            #     y = target_func(x.T)
-            #     return np.array(y.flat)
-
-            svsr_method = run_spl        
-            mksr_model = MKSR(
-                func_name=task,
-                random_seed=None,
-                neuro_eval=neuro_eval,
-                svsr_method=svsr_method,
-                svsr_cfg=cfg['svsr_config'],
-                **cfg['common'],
-                **cfg['mvsr_config'])
-            mksr_model.run()
-            # eval:
-            eq = str(mksr_model)
-            
-            y_pred = eval(eq, eval_dict)
-            mse = np.linalg.norm((y_pred - y_test) / y_test.max(), 2) / y_test.shape[0]
-            print("eq:", eq)
-            print("mse:", mse)
-        except:
-            print("crashed")
-            mse = 1e9
-            eq = "crashed"
-        if mse < norm_threshold:
-            print("Success!")
-            num_success += 1
-        else:
-            print("Failed")
-        all_eqs.append((mse, eq))
-        
-        
-    if save_eqs:
-        output_file = open(output_folder + task + '.txt', 'w')
-        for mse, eqs in all_eqs:
-            output_file.write(f"{mse}, {eqs}\n")
-        output_file.write('success rate : {:.0%}'.format(num_success / num_test))
-        output_file.close()
+    # for i_test in range(num_test):
+    #     print("\rTest {}/{}.".format(i_test, num_test))
+    #     try:
+    #         eqs = {}
+    #         neuro_eval = trainer.get_eval(0) # since only one yd
+    #
+    #         # def neuro_eval(x):
+    #         #     def target_func(x):
+    #         #         return cfg['target_func'](x)
+    #         #     y = target_func(x.T)
+    #         #     return np.array(y.flat)
+    #
+    #         svsr_method = run_spl
+    #         mksr_model = MKSR(
+    #             func_name=task,
+    #             random_seed=None,
+    #             neuro_eval=neuro_eval,
+    #             svsr_method=svsr_method,
+    #             svsr_cfg=cfg['svsr_config'],
+    #             **cfg['common'],
+    #             **cfg['mvsr_config'])
+    #         mksr_model.run()
+    #         # eval:
+    #         eq = str(mksr_model)
+    #
+    #         y_pred = eval(eq, eval_dict)
+    #         mse = np.linalg.norm((y_pred - y_test) / y_test.max(), 2) / y_test.shape[0]
+    #         print("eq:", eq)
+    #         print("mse:", mse)
+    #     except:
+    #         print("crashed")
+    #         mse = 1e9
+    #         eq = "crashed"
+    #     if mse < norm_threshold:
+    #         print("Success!")
+    #         num_success += 1
+    #     else:
+    #         print("Failed")
+    #     all_eqs.append((mse, eq))
+    #
+    #
+    # if save_eqs:
+    #     output_file = open(output_folder + task + '.txt', 'w')
+    #     for mse, eqs in all_eqs:
+    #         output_file.write(f"{mse}, {eqs}\n")
+    #     output_file.write('success rate : {:.0%}'.format(num_success / num_test))
+    #     output_file.close()
 
     print()
     print('final result:')

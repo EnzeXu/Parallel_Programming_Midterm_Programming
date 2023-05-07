@@ -367,9 +367,10 @@ TestSettings = {
             'epochs': 5000,
             'layer': 'Linear',
             'activation': 'Tanh',
-            'layer_size': [3, 128, 256, 128, 1],
-            'lr': 1e-4,
+            'layer_size': [3, 128, 256, 256, 256, 128, 1],  # [3, 128, 256, 128, 1],
+            'lr': 1e-4,  # 1e-4
             'dropout': 0.2,
+            'scheduler': "Fixed",  # ["Fixed", "StepLR", "LambdaLR", "CosineAnnealingLR"]
         },
         'mvsr_config': _default_mvsr_config,
         'svsr_config': {
